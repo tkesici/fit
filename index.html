@@ -138,13 +138,16 @@ dialog.md::backdrop{background:rgba(20,18,15,.45)}
 .figs svg{width:100%;max-width:190px;height:auto;display:block;margin:0 auto}
 .figs figcaption{font-size:.8rem;color:var(--muted)}
 .figs .arr{color:var(--muted);padding:0 6px}
-.kv{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 16px}
+.kv{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 16px}
 .kv div{padding:10px 0}
 .kv div+div{border-left:1px solid var(--line);padding-left:16px}
 .kv dt{color:var(--muted);font-size:.8rem}
 .kv dd{margin:0;font:400 1.3rem var(--serif)}
 .alts{list-style:none;margin:0;padding:0}
-.alts li{padding:8px 0;border-top:1px solid var(--line)}
+.alts li{border-top:1px solid var(--line)}
+.alts button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:9px 2px;background:none;border:0;text-align:left;cursor:pointer}
+.alts button:hover{background:var(--hover)}
+.alts button:hover .ra{color:var(--ink)}
 .alts li:last-child{border-bottom:1px solid var(--line)}
 @media (max-width:560px){
   dialog.md{width:100vw;max-width:100vw;margin:auto 0 0;border-radius:10px 10px 0 0;max-height:92vh;border-width:1px 0 0}
@@ -170,6 +173,8 @@ dialog.md::backdrop{background:rgba(20,18,15,.45)}
 .barl{stroke:var(--eq);stroke-width:3.4;stroke-linecap:round}
 .floor{stroke:var(--line);stroke-width:1.5}
 .ftxt{font:500 7px var(--sans);fill:var(--muted)}
+.kbh{fill:none;stroke:var(--eq);stroke-width:1.8}
+.band{stroke:var(--eq);stroke-width:1.4;stroke-linecap:round}
 </style>
 </head>
 <body>
@@ -207,7 +212,7 @@ dialog.md::backdrop{background:rgba(20,18,15,.45)}
 document.addEventListener('selectstart',e=>e.preventDefault());
 /* ---------- figure drawing ---------- */
 const L=(a,b,c='lm')=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" class="${c}"/>`;
-const db=at=>({t:'db',at}), hd=at=>({t:'h',at}), bar=at=>({t:'bar',at});
+const db=at=>({t:'db',at}), hd=at=>({t:'h',at}), bar=at=>({t:'bar',at}), kb=at=>({t:'kb',at});
 function prop(p){
   switch(p.t){
     case 'db': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="4.6" class="eq"/>`;
@@ -219,6 +224,9 @@ function prop(p){
     case 'cable': return L(p.a,p.b,'cable');
     case 'pul': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="3.2" class="pul"/>`;
     case 'barline': return L(p.a,p.b,'barl');
+    case 'kb': return `<path d="M${p.at[0]-3.2} ${p.at[1]+2}a3.2 3.2 0 0 1 6.4 0" class="kbh"/><circle cx="${p.at[0]}" cy="${p.at[1]+5.5}" r="4.6" class="eq"/>`;
+    case 'ball': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="${p.r}" class="mach"/>`;
+    case 'band': return L(p.a,p.b,'band');
     case 'txt': return `<text x="${p.at[0]}" y="${p.at[1]}" class="ftxt">${p.s}</text>`;
   }
   return '';
@@ -350,6 +358,309 @@ const EX={
   sideplank:{n:'Side plank',c:'Dirsek omuzun tam altında; baş, kalça ve topuk tek çizgi. Zorlanırsan dizleri yere koy.',alt:['Kneeling side plank','Suitcase carry','Copenhagen plank (ileri seviye)']},
   farmer:{n:'Farmer’s walk',c:'Ağır dumbbell’larla dik yürü; omuzlar geride ve aşağıda. Kavrama, bilek ve gövde aynı anda çalışır.',alt:['Suitcase carry','Trap bar carry','Kettlebell carry']}
 };
+/* ---------- alternatives ---------- */
+const RAIL=x=>({t:'ln',a:[x,4],b:[x,110],c:'mt'});
+const band=(a,b)=>({t:'band',a,b});
+const lever=(a,b)=>({t:'ln',a,b,c:'mt'});
+const BOX={t:'rect',x:28,y:92,w:20,h:18};
+const HACK=[{t:'ln',a:[30,9],b:[55,96],c:'mt'},{t:'ln',a:[64,108],b:[92,103]},{t:'ln',a:[78,105],b:[78,110],c:'mt'}];
+const BX=[{t:'ln',a:[38,86],b:[56,70]},{t:'ln',a:[48,80],b:[48,110],c:'mt'},{t:'ln',a:[14,96],b:[14,110],c:'mt'},{t:'roll',at:[14,92]}];
+const LUNGE={h:[60,44],s:[58,55],p:[56,84],k:[78,86],a:[74,110],k2:[48,106],a2:[30,102],t2:[36,110],e:[58,70],w:[58,84],fg:[db([58,87])]};
+const STEP=[{t:'rect',x:68,y:98,w:30,h:12}];
+const SC=[{t:'rect',x:28,y:88,w:46,h:5},{t:'ln',a:[34,88],b:[30,52]},{t:'ln',a:[50,93],b:[50,110],c:'mt'},{t:'rect',x:56,y:78,w:18,h:4}];
+const SCB={h:[46,43],s:[44,54],p:[48,84],k:[74,84],e:[48,70],w:[58,78],bg:SC};
+const NB=[{t:'rect',x:40,y:106,w:22,h:4},{t:'roll',at:[24,99]}];
+const MC=[{t:'rect',x:28,y:94,w:28,h:5},{t:'ln',a:[34,94],b:[34,46]},{t:'ln',a:[42,99],b:[42,110],c:'mt'}];
+const MCB={h:[42,51],s:[42,62],p:[44,92],k:[66,92],a:[70,110]};
+const SEAT=[{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}];
+const POSTS=[{t:'ln',a:[16,10],b:[16,110],c:'mt'},{t:'ln',a:[104,10],b:[104,110],c:'mt'}];
+const PBAR={t:'barline',a:[16,16],b:[104,16]};
+const MR=[{t:'ln',a:[24,97],b:[52,97]},{t:'ln',a:[38,97],b:[38,110],c:'mt'},{t:'ln',a:[47,58],b:[47,90]},{t:'ln',a:[80,86],b:[80,108]}];
+const MRB={h:[39,51],s:[38,62],p:[40,92],k:[58,82],a:[76,94],t:[79,87]};
+const SB=[{t:'rect',x:14,y:80,w:62,h:6},{t:'ln',a:[20,86],b:[20,110],c:'mt'},{t:'ln',a:[70,86],b:[70,110],c:'mt'}];
+const SBB={h:[88,56],s:[76,58],p:[46,60],k:[44,84],a:[42,110],k2:[34,78],a2:[14,78],t2:[12,84],e2:[76,68],w2:[74,78],bg:SB};
+const BRB={h:[39,63],s:[38,74],p:[36,104],k:[62,104],a:[88,104],t:[90,97]};
+const IR=[{t:'ln',a:[50,82],b:[72,62]},{t:'ln',a:[60,73],b:[60,110],c:'mt'}];
+const IRB={h:[78,48],s:[68,56],p:[46,76],k:[32,92],a:[20,110],t:[27,110],bg:IR};
+const KBB={h:[86,46],s:[76,50],p:[48,62],k:[54,86],a:[56,110]};
+const BDB={h:[90,74],s:[78,80],p:[46,82],k:[46,106],a:[24,106],t:[19,110],k2:[46,106],a2:[24,106],t2:[19,110],e:[78,94],w:[78,108],e2:[78,94],w2:[78,108]};
+const SUP={h:[14,103],s:[24,105],e:[36,107],w:[48,107]};
+const HKB={h:[57,42],s:[56,53],p:[56,82],k:[54,106],a:[32,106],t:[27,110],k2:[76,86],a2:[76,110],t2:[83,110]};
+const HKBG=[{t:'pul',at:[98,60]},{t:'txt',at:[74,74],s:'kablo yanda'}];
+const CB=[{t:'rect',x:88,y:80,w:28,h:6},{t:'ln',a:[94,86],b:[94,110],c:'mt'},{t:'ln',a:[110,86],b:[110,110],c:'mt'}];
+const P_=POSES;
+
+const ALT={
+  smithsquat:{n:'Smith machine squat',v:'side',
+    c:'Bar sırtın üstünde, ayaklar bir adım önde. Kalçayı geri ve aşağı indir, dizler ayak uçlarıyla aynı yöne baksın; bar ray üzerinde düz iner.',
+    en:'Bar across your upper back, feet a step forward. Sit your hips back and down with knees tracking your toes; the bar travels straight on the rails.',
+    s:{...ST,e:[50,42],w:[56,31],bg:[RAIL(56)],fg:[bar([56,30])]},
+    e:{h:[61,51],s:[57,62],p:[47,90],k:[69,90],a:[60,110],e:[48,70],w:[56,60],bg:[RAIL(56)],fg:[bar([56,59])]}},
+  boxsquat:{n:'Box squat',v:'side',
+    c:'Arkadaki kutuya kalçayla hafifçe otur, gövdeyi gevşetmeden topuklardan iterek kalk. Derinliği kutu belirler.',
+    en:'Sit back lightly onto the box behind you, stay braced and drive up through your heels. The box sets your depth.',
+    s:{...P_.goblet.s,bg:[BOX]},e:{...P_.goblet.e,bg:[BOX]}},
+  hacksquat:{n:'Hack squat',v:'side',
+    c:'Sırt ve omuzlar pede yaslı, ayaklar platformun ortasında. Kontrollü in, topuklardan iterek kalk; üstte dizleri kilitleme.',
+    en:'Back and shoulders against the pad, feet mid-platform. Lower under control and drive up through your heels; don’t lock your knees at the top.',
+    s:{h:[42,23],s:[44,34],p:[52,62],k:[60,84],a:[72,104],e:[50,46],w:[46,36],bg:[...HACK,{t:'ln',a:[38,36],b:[46,64]}]},
+    e:{h:[46,45],s:[48,56],p:[56,84],k:[79,82],a:[72,104],e:[54,68],w:[50,58],bg:[...HACK,{t:'ln',a:[42,58],b:[50,86]}]}},
+  beltsquat:{n:'Belt squat',v:'side',
+    c:'Kemer kalçada, ayaklar platformlarda. Gövde dik kalır, yükü bacaklar taşır; bel zorlanmaz.',
+    en:'Belt around your hips, feet on the platforms. Your torso stays upright and your legs carry the load, sparing your lower back.',
+    s:{...ST,e:[64,46],w:[76,50],bg:[lever([76,40],[76,110]),{t:'cable',a:[60,62],b:[60,80]}],fg:[bar([60,86])]},
+    e:{h:[61,51],s:[57,62],p:[47,90],k:[69,90],a:[60,110],e:[62,74],w:[76,72],bg:[lever([76,40],[76,110]),{t:'cable',a:[47,90],b:[47,96]}],fg:[bar([47,102])]}},
+  kbrdl:{n:'Kettlebell RDL',v:'side',
+    c:'Kettlebell iki elde, bacakların önünde. Kalçayı geri it, sırt düz kalsın; kalçayı öne sürerek kalk.',
+    en:'Kettlebell in both hands in front of your legs. Push your hips back with a flat back, then drive them forward to stand.',
+    s:{...ST,fg:[kb([62,62])]},e:{...P_.rdl.e,fg:[kb([79,84])]}},
+  slrdl:{n:'Single-leg RDL',v:'side',d:'3 × 8–10 her bacak',
+    c:'Tek bacak üstünde dur; diğer bacak gövdeyle tek çizgide geriye uzanırken öne eğil. Kalça yere paralel kalsın, dönmesin.',
+    en:'Stand on one leg and hinge forward as the other leg reaches back in line with your torso. Keep your hips square to the floor.',
+    s:{...ST,k2:[57,86],a2:[54,106],t2:[60,108],fg:[db([62,66])]},
+    e:{h:[94,56],s:[82,58],p:[54,62],k:[58,86],a:[60,110],k2:[34,62],a2:[12,62],t2:[11,69],e:[82,72],w:[82,86],fg:[db([82,89])]}},
+  backext:{n:'45° back extension',v:'side',
+    c:'Kalça pedin kenarında, ayaklar sabit. Sırt düz şekilde öne in, kalçayı sıkarak bacaklarla tek çizgiye gel; fazla geriye bükülme.',
+    en:'Hips at the edge of the pad, feet locked in. Lower with a flat back, then squeeze your glutes to rise in line with your legs; don’t overarch.',
+    s:{h:[69,99],s:[64,92],p:[50,66],k:[34,80],a:[18,94],t:[14,100],e:[58,82],w:[64,86],bg:BX},
+    e:{h:[80,40],s:[72,47],p:[50,66],k:[34,80],a:[18,94],t:[14,100],e:[64,58],w:[70,53],bg:BX}},
+  revlunge:{n:'Reverse lunge',v:'side',
+    c:'Bir bacakla geriye uzun bir adım at, arka diz yere yaklaşana kadar in. Ön topuktan iterek başlangıca dön.',
+    en:'Take a long step back and lower until your back knee nearly touches the floor. Push through your front heel to return.',
+    s:{...ST,fg:[db([62,66])]},e:LUNGE},
+  stepup:{n:'Step-up',v:'side',
+    c:'Ön ayağın tamamı kutuda. Ön topuktan iterek kutuya çık, arka bacakla itme; kontrollü in.',
+    en:'Whole front foot on the box. Drive through the front heel to step up without pushing off the back leg; lower under control.',
+    s:{h:[58,24],s:[58,35],p:[58,64],k:[78,74],a:[80,98],k2:[58,87],a2:[58,110],e:[58,50],w:[58,64],bg:STEP,fg:[db([58,67])]},
+    e:{h:[80,11],s:[80,22],p:[80,51],k:[80,75],a:[80,98],k2:[74,74],a2:[70,96],t2:[77,96],e:[80,37],w:[80,51],bg:STEP,fg:[db([80,54])]}},
+  splitsquat:{n:'Split squat',v:'side',
+    c:'Ayaklar bir adım aralıkla, arka topuk havada. Yerinde düz aşağı in ve kalk; ağırlık ön bacakta.',
+    en:'Feet a stride apart, back heel up. Lower straight down and stand back up in place, weight on the front leg.',
+    s:{h:[61,24],s:[60,35],p:[58,63],k:[70,86],a:[76,110],k2:[48,86],a2:[34,102],t2:[40,110],e:[60,50],w:[60,64],fg:[db([60,67])]},
+    e:{...LUNGE,a:[76,110]}},
+  glutebridge:{n:'Glute bridge',v:'side',
+    c:'Sırtüstü yat, dizler bükülü, ayaklar yerde. Topuklardan iterek kalçayı kaldır, tepede bir saniye sık.',
+    en:'Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips and squeeze for a second at the top.',
+    s:{...SUP,p:[50,105],k:[68,84],a:[80,106]},
+    e:{...SUP,p:[47,88],k:[70,82],a:[80,106]}},
+  machinehip:{n:'Machine hip thrust',v:'side',
+    c:'Sırt pedde, ped kalçanın üstünde. Topuklardan it, tepede kalçayı sık; çene hafif içeride.',
+    en:'Back on the pad, hip pad across your hips. Drive through your heels and squeeze at the top; chin slightly tucked.',
+    s:{...P_.hipthrust.s,bg:[...P_.hipthrust.s.bg,lever([50,94],[104,106])],fg:[{t:'roll',at:[50,94]}]},
+    e:{...P_.hipthrust.e,bg:[...P_.hipthrust.e.bg,lever([56,69],[104,106])],fg:[{t:'roll',at:[56,69]}]}},
+  pullthrough:{n:'Cable pull-through',v:'side',
+    c:'Arkandaki alçak makaraya sırtını dön, halat bacakların arasından geçsin. Kalçayı geri it, sonra kalçayı öne sürerek dik dur.',
+    en:'Face away from a low pulley with the rope between your legs. Push your hips back, then drive them forward to stand tall.',
+    s:{...P_.rdl.e,e:[72,70],w:[66,86],bg:[...tower(8,104),{t:'cable',a:[6,104],b:[66,86]}],fg:[hd([66,86])]},
+    e:{...ST,w:[64,64],bg:[...tower(8,104),{t:'cable',a:[6,104],b:[64,64]}],fg:[hd([64,64])]}},
+  seatedcurl:{n:'Seated leg curl',v:'side',
+    c:'Uyluk pedi dizlerin hemen üstünde. Topukları kontrollü şekilde koltuğun altına çek, iki üç saniyede geri bırak.',
+    en:'Thigh pad just above your knees. Curl your heels under the seat under control and take two to three seconds to return.',
+    s:{...SCB,a:[98,86],t:[100,79],fg:[{t:'roll',at:[97,92]}]},
+    e:{...SCB,a:[68,107],t:[75,107],fg:[{t:'roll',at:[63,104]}]}},
+  ballcurl:{n:'Stability ball leg curl',v:'side',
+    c:'Sırtüstü yat, topuklar topun üstünde. Kalçayı kaldır, topu topuklarla kendine doğru çek ve geri uzat; kalça düşmesin.',
+    en:'Lie on your back with your heels on the ball. Lift your hips, roll the ball in with your heels and back out without letting your hips drop.',
+    s:{...SUP,p:[55,97],k:[74,92],a:[92,86],t:[94,79],bg:[{t:'ball',at:[96,99],r:12}]},
+    e:{...SUP,p:[48,86],k:[66,72],a:[76,88],t:[78,81],bg:[{t:'ball',at:[80,99],r:12}]}},
+  nordic:{n:'Nordic curl (ileri seviye)',v:'side',d:'3 × 4–6',
+    c:'Dizler pedde, ayak bilekleri sabit. Dizden başa düz bir çizgi halinde olabildiğince yavaş öne in, ellerle karşıla ve geri it.',
+    en:'Knees on a pad, ankles anchored. Lower forward as slowly as you can in a straight line from knees to head, catch yourself with your hands and push back up.',
+    s:{h:[55,41],s:[54,52],p:[52,80],k:[50,106],a:[28,106],t:[22,108],e:[58,66],w:[66,60],bg:NB},
+    e:{h:[96,60],s:[88,68],p:[68,88],k:[50,106],a:[28,106],t:[22,108],e:[96,82],w:[100,96],bg:NB}},
+  machinechest:{n:'Machine chest press',v:'side',
+    c:'Koltuğu tutamaklar göğüs ortasına gelecek şekilde ayarla. Kürek kemikleri pedde, it ve kontrollü geri gel.',
+    en:'Set the seat so the handles line up with mid-chest. Shoulder blades on the pad; press out and return under control.',
+    s:{...MCB,e:[36,74],w:[50,68],bg:MC,fg:[hd([50,68])]},
+    e:{...MCB,e:[56,64],w:[72,63],bg:MC,fg:[hd([72,63])]}},
+  bbbench:{n:'Barbell bench press',v:'side',
+    c:'Gözler barın altında, kürek kemikleri geride. Barı göğsün alt kısmına indir, ayaklar yerde sabit; iterken bar hafif yukarı-geri gider.',
+    en:'Eyes under the bar, shoulder blades pinched. Lower the bar to your lower chest with feet planted; it travels slightly up and back as you press.',
+    s:{...P_.dbbench.s,bg:[...FlatB,lever([22,44],[22,84])],fg:[bar([34,74])]},
+    e:{...P_.dbbench.e,bg:[...FlatB,lever([22,44],[22,84])],fg:[bar([30,46])]}},
+  pushup:{n:'Push-up',v:'side',
+    c:'Eller omuz genişliğinde, vücut baştan topuğa düz. Dirsekler gövdeyle yaklaşık 45° açıyla in, göğüs yere yaklaşsın; kalça düşmesin. Zorsa dizler yerde başla.',
+    en:'Hands shoulder-width apart, body straight from head to heels. Lower with elbows about 45° from your torso until your chest nears the floor; don’t let your hips sag. Start on your knees if needed.',
+    s:{h:[22,76],s:[32,82],p:[64,92],k:[84,99],a:[102,104],t:[106,110],e:[33,95],w:[34,108]},
+    e:{h:[22,94],s:[32,99],p:[64,102],k:[84,103],a:[102,104],t:[106,110],e:[42,91],w:[34,108]}},
+  incmachine:{n:'Incline machine press',v:'side',
+    c:'Sırt pedde, tutamaklar üst göğüs hizasında. Yukarı ve ileri it, tepede dirsekleri kilitleme.',
+    en:'Back on the pad, handles at upper-chest height. Press up and forward without locking your elbows at the top.',
+    s:{...P_.incline.s,bg:[...IncB,lever([40,64],[16,84])],fg:[hd([40,64])]},
+    e:{...P_.incline.e,bg:[...IncB,lever([46,31],[16,84])],fg:[hd([46,31])]}},
+  smithincline:{n:'Smith machine incline press',v:'side',
+    c:'Bench 30°, bar üst göğse inecek şekilde hizalı. Bar rayda düz iner; tepede kilitlemeden it.',
+    en:'Bench at 30°, lined up so the bar comes down to your upper chest. It runs straight on the rails; press without locking out.',
+    s:{...P_.incline.s,w:[41,64],bg:[...IncB,RAIL(41)],fg:[bar([41,62])]},
+    e:{...P_.incline.s,e:[40,48],w:[41,33],bg:[...IncB,RAIL(41)],fg:[bar([41,31])]}},
+  landmine:{n:'Landmine press',v:'side',
+    c:'Barın ucunu omzunun önünde tut, ayaklar kalça genişliğinde. Gövdeyi sabit tutarak barı yukarı ve ileri it.',
+    en:'Hold the end of the bar in front of your shoulder, feet hip-width apart. Keep your torso still and press the bar up and forward.',
+    s:{h:[62,22],s:[60,33],p:[56,62],k:[58,86],a:[60,110],e:[58,48],w:[66,38],bg:[{t:'barline',a:[116,108],b:[66,38]}],fg:[hd([66,38])]},
+    e:{h:[62,22],s:[60,33],p:[56,62],k:[58,86],a:[60,110],e:[70,26],w:[82,18],bg:[{t:'barline',a:[116,108],b:[82,18]}],fg:[hd([82,18])]}},
+  pecdeck:{n:'Pec deck',v:'front',
+    c:'Dirsekler omuz hizasında, ön kollar pedlerde. Pedleri önde birleştir, göğsü sık, yavaşça aç.',
+    en:'Elbows at shoulder height, forearms on the pads. Bring the pads together in front, squeeze your chest and open slowly.',
+    s:{...FS,eL:[34,42],wL:[34,27],eR:[86,42],wR:[86,27],bg:[...SEAT,{t:'rect',x:31,y:24,w:6,h:20},{t:'rect',x:83,y:24,w:6,h:20}]},
+    e:{...FS,eL:[52,44],wL:[54,29],eR:[68,44],wR:[66,29],bg:[...SEAT,{t:'rect',x:51,y:26,w:6,h:20},{t:'rect',x:63,y:26,w:6,h:20}]}},
+  dbfly:{n:'Dumbbell fly',v:'side',
+    c:'Bench’te sırtüstü, dirsekler hafif bükük ve sabit. Kolları yanlara geniş bir yay çizerek aç, göğüste gerilme gelince aynı yayla kapat.',
+    en:'Lie on the bench with elbows slightly bent and fixed. Open your arms in a wide arc, and once you feel a stretch in your chest, close along the same arc.',
+    s:{...P_.dbbench.s,e:[30,88],w:[32,93],fg:[db([32,96])]},
+    e:{...P_.dbbench.e}},
+  lowhighfly:{n:'Low-to-high cable fly',v:'front',
+    c:'Makaralar en altta. Kolları aşağıdan yukarı, göğüs hizasında önde buluşacak şekilde kaldır; dirsekler hafif bükük.',
+    en:'Pulleys at the lowest setting. Sweep your arms up and in to meet in front at chest height, elbows slightly bent.',
+    s:{...FR,eL:[38,46],wL:[26,58],eR:[82,46],wR:[94,58],bg:[...tower(6,100),...tower(114,100),{t:'cable',a:[4,100],b:[26,58]},{t:'cable',a:[112,100],b:[94,58]}],fg:[hd([26,58]),hd([94,58])]},
+    e:{...FR,eL:[40,44],wL:[54,34],eR:[80,44],wR:[66,34],bg:[...tower(6,100),...tower(114,100),{t:'cable',a:[4,100],b:[54,34]},{t:'cable',a:[112,100],b:[66,34]}],fg:[hd([54,34]),hd([66,34])]}},
+  cablelat:{n:'Cable lateral raise',v:'front',d:'+kol',
+    c:'Makara en altta, kablo vücudunun önünden çapraz geçsin. Kolu yana omuz hizasına kadar kaldır, yavaşça indir.',
+    en:'Pulley at the lowest setting, cable crossing in front of your body. Raise your arm out to shoulder height and lower slowly.',
+    s:{...FR,eL:[46,48],wL:[54,62],eR:[76,48],wR:[74,62],bg:[...tower(116,104),{t:'cable',a:[114,104],b:[54,62]}],fg:[hd([54,62])]},
+    e:{...FR,eL:[33,33],wL:[18,35],eR:[76,48],wR:[74,62],bg:[...tower(116,104),{t:'cable',a:[114,104],b:[18,35]}],fg:[hd([18,35])]}},
+  machinelat:{n:'Machine lateral raise',v:'front',
+    c:'Pedler dirseklerin dışında. Dirseklerle iterek kolları omuz hizasına kaldır, omuz silkmeden indir.',
+    en:'Pads on the outside of your elbows. Lead with your elbows to raise your arms to shoulder height and lower without shrugging.',
+    s:{...FS,eL:[45,58],wL:[42,66],eR:[75,58],wR:[78,66],bg:SEAT,fg:[{t:'roll',at:[43,57]},{t:'roll',at:[77,57]}]},
+    e:{...FS,eL:[34,42],wL:[33,50],eR:[86,42],wR:[87,50],bg:SEAT,fg:[{t:'roll',at:[34,40]},{t:'roll',at:[86,40]}]}},
+  bandlat:{n:'Band lateral raise',v:'front',
+    c:'Bandın ortasına bas, uçlar ellerde. Kolları yana omuz hizasına kaldır; bant gerildikçe tepede yavaşla.',
+    en:'Stand on the middle of the band, ends in your hands. Raise your arms out to shoulder height and slow down at the top as the band tightens.',
+    s:{...FR,eL:[45,48],wL:[44,63],eR:[75,48],wR:[76,63],bg:[band([52,110],[44,63]),band([68,110],[76,63])],fg:[hd([44,63]),hd([76,63])]},
+    e:{...FR,eL:[33,33],wL:[18,35],eR:[87,33],wR:[102,35],bg:[band([52,110],[18,35]),band([68,110],[102,35])],fg:[hd([18,35]),hd([102,35])]}},
+  assistpullup:{n:'Assisted pull-up',v:'front',
+    c:'Dizlerini platforma koy, barı omuz genişliğinden biraz açık tut. Göğsünü bara doğru çek, çene barı geçince kontrollü in. Destek azaldıkça zorlaşır.',
+    en:'Kneel on the platform and grip the bar slightly wider than shoulder-width. Pull your chest toward the bar, then lower under control once your chin clears it. Less assistance makes it harder.',
+    s:{h:[60,40],sL:[48,52],sR:[72,52],pL:[53,82],pR:[67,82],kL:[52,100],kR:[68,100],aL:[52,104],aR:[68,104],eL:[40,34],wL:[36,16],eR:[80,34],wR:[84,16],bg:[...POSTS,{t:'rect',x:40,y:103,w:40,h:5}],fg:[PBAR]},
+    e:{h:[60,10],sL:[48,22],sR:[72,22],pL:[53,52],pR:[67,52],kL:[52,70],kR:[68,70],aL:[52,74],aR:[68,74],eL:[34,32],wL:[40,16],eR:[86,32],wR:[80,16],bg:[...POSTS,{t:'rect',x:40,y:73,w:40,h:5},lever([60,78],[60,110])],fg:[PBAR]}},
+  pullup:{n:'Pull-up',v:'front',d:'3 × 4–8',
+    c:'Barı omuz genişliğinde, avuçlar öne bakacak şekilde tut. Kürek kemiklerini aşağı çekerek başla, çene barı geçene kadar çek, kollar tamamen uzanana kadar kontrollü in.',
+    en:'Grip the bar shoulder-width, palms facing away. Start by pulling your shoulder blades down, pull until your chin clears the bar and lower all the way under control.',
+    s:{h:[60,34],sL:[48,46],sR:[72,46],pL:[53,76],pR:[67,76],kL:[52,94],kR:[68,94],aL:[52,104],aR:[68,104],eL:[40,30],wL:[36,16],eR:[80,30],wR:[84,16],bg:POSTS,fg:[PBAR]},
+    e:{h:[60,10],sL:[48,22],sR:[72,22],pL:[53,52],pR:[67,52],kL:[52,70],kR:[68,70],aL:[52,80],aR:[68,80],eL:[34,32],wL:[40,16],eR:[86,32],wR:[80,16],bg:POSTS,fg:[PBAR]}},
+  sapulldown:{n:'Single-arm cable pulldown',v:'front',d:'+kol',
+    c:'Tek kolla tutamağı yukarıdan tut. Dirseği aşağı ve hafif geriye, yan beline doğru çek; gövdeyi döndürme.',
+    en:'Hold the handle overhead with one arm. Pull your elbow down and slightly back toward your side without twisting your torso.',
+    s:{...FS,eL:[42,28],wL:[38,12],eR:[78,56],wR:[80,70],bg:[{t:'cable',a:[38,1],b:[38,12]},...SEAT],fg:[hd([38,12])]},
+    e:{...FS,eL:[34,54],wL:[40,40],eR:[78,56],wR:[80,70],bg:[{t:'cable',a:[38,1],b:[40,40]},...SEAT],fg:[hd([40,40])]}},
+  machinerow:{n:'Machine row',v:'side',
+    c:'Göğüs pedde, kollar tam uzanmış. Dirsekleri gövdeye yakın geriye çek, kürek kemiklerini sık; göğüs pedden ayrılmasın.',
+    en:'Chest on the pad, arms fully extended. Pull your elbows back close to your body and squeeze your shoulder blades; keep your chest on the pad.',
+    s:{...MRB,e:[52,66],w:[66,68],bg:[...MR,lever([66,68],[86,106])],fg:[hd([66,68])]},
+    e:{...MRB,e:[26,68],w:[44,72],bg:[...MR,lever([44,72],[86,106])],fg:[hd([44,72])]}},
+  sadbrow:{n:'Single-arm dumbbell row',v:'side',d:'+kol',
+    c:'Bir el ve aynı taraftaki diz bench’te, sırt düz. Dumbbell’ı kalçana doğru çek, dirsek gövdeye yakın; gövdeyi döndürme.',
+    en:'One hand and the same-side knee on the bench, back flat. Row the dumbbell toward your hip, elbow close to your body, without twisting.',
+    s:{...SBB,e:[76,72],w:[76,88],fg:[db([76,91])]},
+    e:{...SBB,e:[62,50],w:[66,64],fg:[db([66,67])]}},
+  tbarrow:{n:'Chest-supported T-bar row',v:'side',
+    c:'Göğüs pedde, tutamakları nötr tut. Dirsekleri geriye sür, tepede kürek kemiklerini sık ve kontrollü indir.',
+    en:'Chest on the pad, neutral grip on the handles. Drive your elbows back, squeeze your shoulder blades at the top and lower under control.',
+    s:{...P_.csrow.s,bg:[...RowB,{t:'barline',a:[116,108],b:[68,94]}],fg:[bar([70,94])]},
+    e:{...P_.csrow.e,bg:[...RowB,{t:'barline',a:[116,108],b:[58,80]}],fg:[bar([60,80])]}},
+  sacrow:{n:'Single-arm cable row',v:'side',d:'+kol',
+    c:'Tek kolla tutamağı çek; dirsek gövdeye yakın geriye gitsin. Gövde dik ve sabit kalsın, kalçadan dönme.',
+    en:'Row the handle with one arm, elbow travelling back close to your body. Keep your torso upright and still without rotating from the hips.',
+    s:{...P_.seatedrow.s,e2:[46,74],w2:[56,80]},e:{...P_.seatedrow.e,e2:[46,74],w2:[56,80]}},
+  bandrow:{n:'Band row',v:'side',
+    c:'Yerde bacaklar düz otur, bandı ayak tabanlarından geçir. Göğüs dik, dirsekleri geriye çek ve kürek kemiklerini sık.',
+    en:'Sit on the floor with legs straight and the band looped around your feet. Chest up, pull your elbows back and squeeze your shoulder blades.',
+    s:{...BRB,e:[52,80],w:[66,84],bg:[band([90,100],[66,84])],fg:[hd([66,84])]},
+    e:{...BRB,e:[26,82],w:[42,86],bg:[band([90,100],[42,86])],fg:[hd([42,86])]}},
+  bandfacepull:{n:'Band face pull',v:'side',
+    c:'Bandı yüz hizasında bir direğe bağla. Uçları yüzüne doğru çek, dirsekler yüksek ve dışa açık; sonda arka omzu sık.',
+    en:'Anchor the band at face height. Pull the ends toward your face with elbows high and wide, squeezing your rear delts at the end.',
+    s:{...P_.facepull.s,bg:[lever([112,6],[112,110]),band([112,26],[92,33])]},
+    e:{...P_.facepull.e,bg:[lever([112,6],[112,110]),band([112,26],[66,20])]}},
+  revpecdeck:{n:'Reverse pec deck',v:'front',
+    c:'Göğüs pedde, kollar önde düz. Kolları yanlara geniş açarak geriye götür, arka omzu sık; omuz silkme.',
+    en:'Chest on the pad, arms straight out in front. Sweep your arms out and back, squeezing your rear delts without shrugging.',
+    s:{...FS,eL:[50,46],wL:[56,48],eR:[70,46],wR:[64,48],bg:SEAT,fg:[hd([56,48]),hd([64,48])]},
+    e:{...FS,eL:[33,42],wL:[18,44],eR:[87,42],wR:[102,44],bg:SEAT,fg:[hd([18,44]),hd([102,44])]}},
+  increvfly:{n:'Incline reverse fly',v:'side',
+    c:'Göğsün 30–45° eğimli bench’e yaslı, kollar aşağı sarkık. Dirsekler hafif bükük, kolları yana açarak omuz hizasına kaldır.',
+    en:'Chest against a 30–45° bench, arms hanging down. With elbows slightly bent, raise your arms out to the sides up to shoulder height.',
+    s:{...IRB,e:[70,72],w:[72,88],fg:[db([72,91])]},
+    e:{...IRB,e:[64,62],w:[62,66],fg:[db([62,68])]}},
+  hammercurl:{n:'Hammer curl',v:'side',
+    c:'Avuçlar birbirine baksın (çekiç tutuşu). Dirsekler gövdede sabit, sallanmadan kaldır, iki saniyede indir.',
+    en:'Palms facing each other (hammer grip). Elbows fixed at your sides; curl without swinging and lower over two seconds.',
+    s:P_.curl.s,e:P_.curl.e},
+  cablecurl:{n:'Cable curl',v:'side',
+    c:'Makara en altta, kabloya dönük dur. Dirsekler gövdede sabit, tutamağı omuzlara doğru kaldır; kablo hareket boyunca gerili kalır.',
+    en:'Pulley at the lowest setting, facing the cable. Elbows fixed at your sides, curl the handle toward your shoulders; the cable keeps tension throughout.',
+    s:{...ST,bg:[...tower(100,104),{t:'cable',a:[98,104],b:[62,63]}],fg:[hd([62,63])]},
+    e:{...ST,w:[70,35],bg:[...tower(100,104),{t:'cable',a:[98,104],b:[70,35]}],fg:[hd([70,35])]}},
+  inclinecurl:{n:'Incline dumbbell curl',v:'side',
+    c:'Bench 45–60°, kollar omuzdan düz aşağı sarkık. Dirsekler yerinde kalsın; dumbbell’ları kaldır ve tam aşağı indir.',
+    en:'Bench at 45–60°, arms hanging straight down from your shoulders. Keep your elbows in place, curl up and lower all the way.',
+    s:{...P_.incline.s,e:[36,77],w:[36,92],fg:[db([36,95])]},
+    e:{...P_.incline.s,e:[36,77],w:[46,66],fg:[db([47,63])]}},
+  ropepushdown:{n:'Rope pushdown',v:'side',
+    c:'Halatı tut, dirsekler gövdeye yapışık. Aşağıda halatın uçlarını hafifçe dışa aç ve tricepsi sık.',
+    en:'Hold the rope with elbows pinned to your sides. At the bottom, spread the rope ends slightly and squeeze your triceps.',
+    s:P_.pushdown.s,e:P_.pushdown.e},
+  sapushdown:{n:'Single-arm cable pushdown',v:'side',d:'+kol',
+    c:'Tek kolla tutamağı tut, dirsek gövdeye yapışık. Yalnızca ön kol hareket eder; aşağıda tam uzat.',
+    en:'Hold the handle with one arm, elbow pinned to your side. Only the forearm moves; fully extend at the bottom.',
+    s:P_.pushdown.s,e:P_.pushdown.e},
+  kickback:{n:'Dumbbell kickback',v:'side',
+    c:'Öne eğil, sırt düz; üst kol gövdeye paralel ve sabit. Ön kolu geriye doğru tam uzat, sonda tricepsi sık.',
+    en:'Hinge forward with a flat back, upper arm parallel to your torso and still. Extend your forearm fully back and squeeze your triceps at the end.',
+    s:{...KBB,e:[62,50],w:[62,64],fg:[db([62,67])]},
+    e:{...KBB,e:[62,50],w:[47,51],fg:[db([44,51])]}},
+  birddog:{n:'Bird dog',v:'side',
+    c:'Eller omuzların, dizler kalçanın altında. Karşı kol ve bacağı aynı anda uzat, beli çukurlaştırma; iki saniye tut, taraf değiştir.',
+    en:'Hands under your shoulders, knees under your hips. Extend the opposite arm and leg together without arching your back; hold for two seconds and switch sides.',
+    s:BDB,
+    e:{...BDB,k:[24,82],a:[2,82],t:[1,76],e2:[92,78],w2:[106,76]}},
+  revcrunch:{n:'Reverse crunch',v:'side',d:'3 × 10–12',
+    c:'Sırtüstü yat, dizler 90° bükülü. Karın kaslarıyla kalçayı yerden hafifçe kaldırıp dizleri göğse yaklaştır; bacakları savurma.',
+    en:'Lie on your back, knees bent at 90°. Use your abs to curl your hips slightly off the floor and bring your knees toward your chest; don’t swing your legs.',
+    s:{...SUP,p:[50,105],k:[52,82],a:[74,80],t:[76,73]},
+    e:{...SUP,p:[50,98],k:[42,77],a:[62,70],t:[64,63]}},
+  hollow:{n:'Hollow hold',v:'side',d:'3 × 20–30 sn',
+    c:'Sırtüstü yat, beli yere bastır. Omuzları ve bacakları yerden kaldır, kollar başın üstünde uzansın; bel yerden kalkmadan tut.',
+    en:'Lie on your back and press your lower back into the floor. Lift your shoulders and legs with arms overhead, and hold without your back lifting.',
+    s:{...SUP,p:[54,106],k:[78,106],a:[102,106],t:[104,99]},
+    e:{h:[19,92],s:[28,98],p:[56,106],k:[78,100],a:[100,94],t:[102,87],e:[16,86],w:[4,78]}},
+  bandpallof:{n:'Band Pallof press',v:'side',
+    c:'Bandı göğüs hizasında yana bağla. Elleri göğüsten öne uzat, gövdenin dönmesine izin verme; iki saniye tut.',
+    en:'Anchor the band at chest height to one side. Press your hands straight out from your chest without letting your torso rotate; hold for two seconds.',
+    s:{...P_.pallof.s,bg:[{t:'txt',at:[78,54],s:'bant yanda'}]},
+    e:{...P_.pallof.e,bg:[{t:'txt',at:[78,54],s:'bant yanda'}]}},
+  hkpallof:{n:'Half-kneeling Pallof press',v:'side',
+    c:'Kabloya yan dönük; içteki diz yerde, dıştaki ayak önde. Kalçayı sık, elleri göğüsten öne uzat; gövde dönmesin.',
+    en:'Side-on to the cable, inside knee down and outside foot forward. Squeeze your glutes and press your hands out from your chest without rotating.',
+    s:{...HKB,e:[59,68],w:[66,60],bg:HKBG,fg:[hd([66,60])]},
+    e:{...HKB,e:[72,55],w:[88,55],bg:HKBG,fg:[hd([88,55])]}},
+  suitcase:{n:'Suitcase carry',v:'front',d:'3 × 20 m her taraf',
+    c:'Tek elde ağır bir dumbbell, diğer kol serbest. Gövde dik ve yana eğilmeden yürü; omuzlar aynı hizada kalsın.',
+    en:'A heavy dumbbell in one hand, the other arm free. Walk tall without leaning to the side, keeping your shoulders level.',
+    s:{...FR,eL:[45,48],wL:[44,63],eR:[76,46],wR:[80,58],fg:[db([44,66])]},
+    e:{...FR,kR:[68,84],aR:[70,102],eL:[45,48],wL:[44,63],eR:[76,46],wR:[80,58],fg:[db([44,66])]}},
+  trapcarry:{n:'Trap bar carry',v:'side',
+    c:'Trap bar’ın içine gir, tutamakları kavrayıp kalçadan iterek kalk. Dik dur, kısa ve kontrollü adımlarla yürü.',
+    en:'Step inside the trap bar, grip the handles and stand up by driving through your hips. Stay tall and walk with short, controlled steps.',
+    s:{...P_.farmer.s,fg:[{t:'barline',a:[44,66],b:[80,66]},bar([44,66]),bar([80,66])]},
+    e:{...P_.farmer.e,fg:[{t:'barline',a:[46,66],b:[82,66]},bar([46,66]),bar([82,66])]}},
+  kbcarry:{n:'Kettlebell carry',v:'side',
+    c:'Her elde bir kettlebell, kollar yanlarda. Omuzlar geride ve aşağıda, gövde dik; kısa adımlarla yürü.',
+    en:'A kettlebell in each hand, arms at your sides. Shoulders back and down, torso tall; walk with short steps.',
+    s:{...P_.farmer.s,fg:[kb([62,64])]},e:{...P_.farmer.e,fg:[kb([64,64])]}},
+  kneelsideplank:{n:'Kneeling side plank',v:'side',
+    c:'Dirsek omzun altında, dizler bükülü ve yerde. Kalçayı kaldırıp baş, kalça ve diz tek çizgide olacak şekilde tut.',
+    en:'Elbow under your shoulder, knees bent on the floor. Lift your hips so your head, hips and knees form one line, and hold.',
+    s:{h:[21,87],s:[30,92],p:[56,104],k:[78,108],a:[90,98],t:null,e:[30,108],w:[46,108],e2:[42,86],w2:[54,98]},
+    e:{h:[20,88],s:[30,92],p:[56,99],k:[78,108],a:[90,98],t:null,e:[30,108],w:[46,108],e2:[42,84],w2:[55,92]}},
+  copenhagen:{n:'Copenhagen plank (ileri seviye)',v:'side',d:'3 × 15–20 sn her taraf',
+    c:'Yan plank pozisyonunda üstteki bacak bench’te. Kalçayı kaldır, alttaki bacağı bench’e doğru çek; vücut tek çizgide kalsın.',
+    en:'Side plank with your top leg on a bench. Lift your hips and bring your bottom leg up toward the bench, keeping your body in one line.',
+    s:{h:[21,87],s:[30,92],p:[56,102],k:[80,90],a:[104,80],t:null,k2:[80,106],a2:[104,108],t2:null,e:[30,108],w:[46,108],e2:[42,86],w2:[54,96],bg:CB},
+    e:{h:[20,88],s:[30,92],p:[57,88],k:[80,85],a:[104,80],t:null,k2:[80,90],a2:[100,92],t2:null,e:[30,108],w:[46,108],e2:[42,84],w2:[55,90],bg:CB}}
+};
+const NAME2ID={};
+for(const [id,x] of [...Object.entries(EX),...Object.entries(ALT)])NAME2ID[x.n]=id;
 const PROGRAMS={
   p4:{label:'Bölgesel',days:[
     {t:'Üst vücut 1',d:'≈55 dk',x:[['dbbench','4 × 6–10','2–3 dk'],['csrow','4 × 8–12','2 dk'],['incline','3 × 10–12','90 sn'],['pulldown','3 × 10–12','90 sn'],['latraise','3 × 12–15','60 sn'],['curl','2 × 12','60 sn'],['pushdown','2 × 12','60 sn']]},
@@ -465,6 +776,7 @@ const SLOTS=[
 const store={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const dlg=document.getElementById('md');
 function openDialog(title,body){
+  if(dlg.open)dlg.close();
   dlg.innerHTML=`<div class="md-in"><div class="md-h"><h2>${title}</h2><button class="md-x" aria-label="${T().close}">×</button></div><div class="md-b">${body}</div></div>`;
   dlg.querySelector('.md-x').onclick=()=>dlg.close();
   dlg.showModal();
@@ -473,8 +785,8 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
 
 /* ---------- i18n ---------- */
 const UI={
-  tr:{tabT:'Antrenman',tabN:'Beslenme',start:'Başlangıç',end:'Bitiş',sets:'Set × tekrar',rest:'Dinlenme',alts:'Alternatifler',shop:'Alışveriş listesi',recipe:'Tarif',por:n=>`${n} porsiyon`,c:'karb g',p:'protein g',f:'yağ g',s:'şeker g',prep:m=>`aktif hazırlık ≈${m} dk`,bf:'Kahvaltı',go:'İşe götürülür',close:'Kapat',less:'Porsiyon azalt',more:'Porsiyon artır',toLight:'Açık temaya geç',toDark:'Koyu temaya geç',light:'Açık tema',dark:'Koyu tema',eff:{g:'Kolay',y:'Biraz uğraştırır',r:'Ciddi hazırlık'},gi:{low:'Düşük GI',mid:'Orta GI',lowmid:'Düşük–orta GI',high:'Yüksek GI'},slots:['Öğle','Ara öğün','Akşam','Gece'],langs:'Dil'},
-  en:{tabT:'Training',tabN:'Nutrition',start:'Start',end:'Finish',sets:'Sets × reps',rest:'Rest',alts:'Alternatives',shop:'Shopping list',recipe:'Recipe',por:n=>`${n} serving${n>1?'s':''}`,c:'carbs g',p:'protein g',f:'fat g',s:'sugar g',prep:m=>`≈${m} min active prep`,bf:'Breakfast',go:'Packs for work',close:'Close',less:'Fewer servings',more:'More servings',toLight:'Switch to light theme',toDark:'Switch to dark theme',light:'Light theme',dark:'Dark theme',eff:{g:'Easy',y:'Some effort',r:'Serious prep'},gi:{low:'Low GI',mid:'Medium GI',lowmid:'Low–medium GI',high:'High GI'},slots:['Lunch','Snack','Dinner','Late night'],langs:'Language'}
+  tr:{tabT:'Antrenman',tabN:'Beslenme',start:'Başlangıç',end:'Bitiş',sets:'Set × tekrar',rest:'Dinlenme',time:'Süre',alts:'Alternatifler',shop:'Alışveriş listesi',recipe:'Tarif',por:n=>`${n} porsiyon`,c:'karb g',p:'protein g',f:'yağ g',s:'şeker g',prep:m=>`aktif hazırlık ≈${m} dk`,bf:'Kahvaltı',go:'İşe götürülür',close:'Kapat',less:'Porsiyon azalt',more:'Porsiyon artır',toLight:'Açık temaya geç',toDark:'Koyu temaya geç',light:'Açık tema',dark:'Koyu tema',eff:{g:'Kolay',y:'Biraz uğraştırır',r:'Ciddi hazırlık'},gi:{low:'Düşük GI',mid:'Orta GI',lowmid:'Düşük–orta GI',high:'Yüksek GI'},slots:['Öğle','Ara öğün','Akşam','Gece'],langs:'Dil'},
+  en:{tabT:'Training',tabN:'Nutrition',start:'Start',end:'Finish',sets:'Sets × reps',rest:'Rest',time:'Time',alts:'Alternatives',shop:'Shopping list',recipe:'Recipe',por:n=>`${n} serving${n>1?'s':''}`,c:'carbs g',p:'protein g',f:'fat g',s:'sugar g',prep:m=>`≈${m} min active prep`,bf:'Breakfast',go:'Packs for work',close:'Close',less:'Fewer servings',more:'More servings',toLight:'Switch to light theme',toDark:'Switch to dark theme',light:'Light theme',dark:'Dark theme',eff:{g:'Easy',y:'Some effort',r:'Serious prep'},gi:{low:'Low GI',mid:'Medium GI',lowmid:'Low–medium GI',high:'High GI'},slots:['Lunch','Snack','Dinner','Late night'],langs:'Language'}
 };
 const METHOD_EN={'Fırın':'Oven','Ocak':'Stovetop','Airfryer':'Air fryer','Döküm tava':'Cast iron','Pişirmesiz':'No-cook','Blender':'Blender'};
 const PROG_EN={'Bölgesel':'Split','Full body':'Full body','Üst vücut 1':'Upper body 1','Alt vücut 1':'Lower body 1','Üst vücut 2':'Upper body 2','Alt vücut 2':'Lower body 2','Full body A':'Full body A','Full body B':'Full body B','Full body C':'Full body C'};
@@ -549,7 +861,7 @@ let lang=store.get('fit-lang','');
 if(lang!=='tr'&&lang!=='en')lang=(navigator.language||'tr').toLowerCase().startsWith('tr')?'tr':'en';
 const T=()=>UI[lang];
 const en=()=>lang==='en';
-const tx=s=>en()?s.replace(/her bacak/g,'per leg').replace(/her taraf/g,'per side').replace(/ sn\b/g,' s').replace(/ dk\b/g,' min').replace('(ileri seviye)','(advanced)'):s;
+const tx=s=>en()?s.replace(/her bacak/g,'per leg').replace(/her taraf/g,'per side').replace(/her kol/g,'per arm').replace(/ sn\b/g,' s').replace(/ dk\b/g,' min').replace('(ileri seviye)','(advanced)'):s;
 const mName=id=>en()?MEALS_EN[id].n:MEALS[id].n;
 const progName=s=>en()?(PROG_EN[s]||s):s;
 
@@ -570,25 +882,38 @@ function renderTraining(){
   document.getElementById('workouts').innerHTML=PROGRAMS[prog].days.map((day,di)=>`
     <section class="blk">
       <div class="blk-h"><h2>${progName(day.t)}</h2><span class="meta">${tx(day.d)}</span></div>
-      <div class="list">${day.x.map(([id,dose],xi)=>`
-        <button class="row" data-d="${di}" data-x="${xi}"><span class="rn">${EX[id].n}</span><span class="rm">${tx(dose)}</span><span class="ra" aria-hidden="true">›</span></button>`).join('')}
+      <div class="list">${day.x.map(([id,dose,rest],xi)=>`
+        <button class="row" data-d="${di}" data-x="${xi}"><span class="rn">${EX[id].n}</span><span class="rm">${tx(`${dose} · ≈${exMin(dose,rest)} dk`)}</span><span class="ra" aria-hidden="true">›</span></button>`).join('')}
       </div>
     </section>`).join('');
   document.querySelectorAll('#workouts .row').forEach(b=>b.onclick=()=>openExercise(...PROGRAMS[prog].days[b.dataset.d].x[b.dataset.x]));
 }
-function openExercise(id,dose,rest){
-  const e=EX[id],p=POSES[id],U=T();
-  const f=(pose,lab)=>{const s=fig(p.v,pose,e.n+' '+lab);return en()?s.replace('kablo yanda','cable at side'):s;};
-  openDialog(e.n,`
+const exData=id=>EX[id]||ALT[id];
+const altDose=(id,dose)=>{const d=ALT[id]&&ALT[id].d;if(!d)return dose;if(d[0]!=='+')return d;return /her /.test(dose)?dose:`${dose} her ${d.slice(1)}`;};
+// sets × (work + rest) + a minute to set up; reps ≈ 4 s each, holds/carries by their own seconds/metres
+function exMin(dose,rest){
+  const sets=parseInt(dose,10)||1,sides=/her (taraf|bacak|kol)/.test(dose)?2:1,body=dose.replace(/^\d+\s*×\s*/,'');
+  const sec=body.match(/(\d+)\s*sn/),dist=body.match(/(\d+)\s*m\b/);
+  const work=sec?+sec[1]:dist?+dist[1]:Math.max(...(body.match(/\d+/g)||['10']).map(Number))*4;
+  const r=(rest.match(/\d+/g)||['60']).map(Number),pause=r.reduce((x,y)=>x+y,0)/r.length*(/dk/.test(rest)?60:1);
+  return Math.max(1,Math.round((sets*(work*sides+pause)+60)/60));
+}
+function openExercise(id,dose,rest,from){
+  const e=exData(id),p=POSES[id]||ALT[id],U=T(),d=altDose(id,dose);
+  const base=from||id;
+  const alts=from?[from,...EX[from].alt.map(n=>NAME2ID[n]).filter(a=>a!==id)]:EX[id].alt.map(n=>NAME2ID[n]);
+  const f=(pose,lab)=>{const s=fig(p.v,pose,e.n+' '+lab);return en()?s.replace('kablo yanda','cable at side').replace('bant yanda','band at side'):s;};
+  openDialog(tx(e.n),`
     <div class="figs">
       <figure>${f(p.s,U.start)}<figcaption>${U.start}</figcaption></figure>
       <span class="arr" aria-hidden="true">→</span>
       <figure>${f(p.e,U.end)}<figcaption>${U.end}</figcaption></figure>
     </div>
-    <dl class="kv"><div><dt>${U.sets}</dt><dd>${tx(dose)}</dd></div><div><dt>${U.rest}</dt><dd>${tx(rest)}</dd></div></dl>
-    <p>${en()?EX_EN[id]:e.c}</p>
+    <dl class="kv"><div><dt>${U.sets}</dt><dd>${tx(d)}</dd></div><div><dt>${U.rest}</dt><dd>${tx(rest)}</dd></div><div><dt>${U.time}</dt><dd>${tx(`≈${exMin(d,rest)} dk`)}</dd></div></dl>
+    <p>${en()?(EX_EN[id]||e.en):e.c}</p>
     <h3>${U.alts}</h3>
-    <ul class="alts">${e.alt.map(a=>`<li>${tx(a)}</li>`).join('')}</ul>`);
+    <ul class="alts">${alts.map(a=>`<li><button type="button" data-a="${a}"><span>${tx(exData(a).n)}</span><span class="ra" aria-hidden="true">›</span></button></li>`).join('')}</ul>`);
+  dlg.querySelectorAll('.alts button').forEach(b=>b.onclick=()=>{const a=b.dataset.a;openExercise(a,dose,rest,a===base?undefined:base);});
 }
 
 /* ---------- nutrition ---------- */
