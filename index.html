@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fit — Tevfik Kesici</title>
+<meta name="description" content="Antrenman programı ve toplu hazırlanan yemek tarifleri.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1EDE4; --ink:#1D1B18; --muted:#6F6A61; --line:#D8D2C6; --soft:#E9E4D9;
+  --tint:#ECE7DD; --hover:#E3DDD1; --eq:#8C8273;
+  --g:#5F8A5E; --y:#C49A2A; --r:#B4553D; --sug:#93561C; --sug-bg:#E9DECA;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161513; --ink:#ECE7DE; --muted:#9C968B; --line:#2F2C28; --soft:#211F1C;
+    --tint:#1C1A18; --hover:#262420; --eq:#A69C8B;
+    --g:#7FAE7C; --y:#D9B44E; --r:#D27760; --sug:#E2AA6C; --sug-bg:#2B241B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161513; --ink:#ECE7DE; --muted:#9C968B; --line:#2F2C28; --soft:#211F1C;
+  --tint:#1C1A18; --hover:#262420; --eq:#A69C8B;
+  --g:#7FAE7C; --y:#D9B44E; --r:#D27760; --sug:#E2AA6C; --sug-bg:#2B241B;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.page{max-width:760px;padding:11vh 4.5vw 14vh}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:56px;font-size:.92rem;color:var(--muted)}
+.topline a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
+.topline a:hover{color:var(--ink);border-color:var(--ink)}
+.tools{display:flex;align-items:center;gap:10px}
+.langs{display:flex;align-items:center;height:36px;padding:3px;border:1px solid var(--line);border-radius:999px;transition:border-color .2s}
+.langs:hover{border-color:var(--ink)}
+.langs button{height:28px;min-width:34px;padding:0 9px;border:0;border-radius:999px;background:none;color:var(--muted);font:500 .76rem var(--sans);letter-spacing:.08em;cursor:pointer;transition:background .2s,color .2s}
+.langs button:hover{color:var(--ink)}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.themeb{display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);cursor:pointer;transition:color .2s,border-color .2s}
+.themeb:hover{color:var(--ink);border-color:var(--ink)}
+.themeb svg{width:17px;height:17px;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.themeb:hover svg{transform:rotate(-20deg)}
+.themeb .sun{display:none} .themeb .moon{display:block}
+.themeb.is-dark .sun{display:block} .themeb.is-dark .moon{display:none}
+@media (prefers-reduced-motion:reduce){.themeb svg{transition:none}}
+h1{font:400 clamp(3.2rem,8vw,5.6rem)/1 var(--serif);letter-spacing:-.025em;margin:0 0 44px}
+.lede{max-width:34em;margin:0 0 40px;font-size:1.12rem}
+.tabs{display:flex;gap:28px;margin:0 0 8px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:0 0 12px;cursor:pointer;color:var(--muted);font-size:1.02rem;border-bottom:1.5px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
+.tabs button:hover{color:var(--ink)}
+.sub{display:flex;gap:20px;margin:26px 0 0;font-size:.95rem}
+.sub button{background:none;border:0;padding:0 0 3px;cursor:pointer;color:var(--muted);border-bottom:1px solid transparent}
+.sub button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
+.hint{color:var(--muted);font-size:.95rem;margin:22px 0 0}
+section.blk{margin-top:52px}
+.blk-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.blk-h h2{font:400 1.75rem/1.2 var(--serif);margin:0;letter-spacing:-.01em}
+.blk-h .meta{color:var(--muted);font-size:.92rem}
+.list{border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:1fr auto 18px;align-items:center;gap:18px;width:100%;padding:15px 4px;background:none;border:0;border-top:1px solid var(--line);text-align:left;cursor:pointer}
+.row.meal{grid-template-columns:10px 1fr 18px}
+.row:hover{background:var(--hover)}
+.row.bf{background:var(--tint)}
+.row.bf:hover{background:var(--hover)}
+.rn{font:400 1.2rem/1.3 var(--serif)}
+.rm{color:var(--muted);font-size:.9rem;white-space:nowrap}
+.ra{color:var(--muted);font-size:.95rem;text-align:right}
+.row:hover .ra{color:var(--ink)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.g{background:var(--g)} .dot.y{background:var(--y)} .dot.r{background:var(--r)}
+@media (max-width:520px){
+  body{font-size:16px}
+  .page{padding:7vh 22px 10vh}
+  .topline{margin-bottom:40px}
+  .row{gap:4px 14px}
+  .row:not(.meal){grid-template-columns:1fr 18px}
+  .row:not(.meal) .rm{grid-column:1;grid-row:2}
+  .row:not(.meal) .ra{grid-column:2;grid-row:1 / span 2}
+}
+
+/* dialog */
+dialog.md{border:1px solid var(--line);padding:0;border-radius:6px;background:var(--bg);color:var(--ink);width:min(640px,94vw);max-height:88vh;overflow:hidden}
+dialog.md::backdrop{background:rgba(20,18,15,.45)}
+.md-in{display:flex;flex-direction:column;max-height:88vh}
+.md-h{display:flex;align-items:flex-start;gap:16px;padding:22px 24px 14px;border-bottom:1px solid var(--line)}
+.md-h h2{flex:1;margin:0;font:400 1.8rem/1.15 var(--serif);letter-spacing:-.01em}
+.md-x{flex:none;background:none;border:0;color:var(--muted);font-size:1.5rem;line-height:1;cursor:pointer;padding:2px 4px}
+.md-x:hover{color:var(--ink)}
+.md-b{overflow-y:auto;padding:18px 24px 26px}
+.md-b h3{font:400 1.25rem/1.2 var(--serif);margin:26px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.md-b p{margin:0 0 10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.tags .ef{display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
+.mac{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mac div{padding:10px 4px;text-align:center;line-height:1.2}
+.mac div+div{border-left:1px solid var(--line)}
+.mac b{display:flex;align-items:center;justify-content:center;gap:6px;font:400 1.35rem var(--serif)}
+.mac small{color:var(--muted);font-size:.75rem}
+.mac .sug{background:var(--sug-bg)} .mac .sug b,.mac .sug small{color:var(--sug)}
+.gi{width:9px;height:9px;border-radius:50%;display:inline-block}
+.gi.low,.gi.lowmid{background:var(--g)} .gi.mid{background:var(--y)} .gi.high{background:var(--r)}
+.por{display:inline-flex;align-items:center;gap:6px;font:400 .9rem var(--sans);color:var(--muted)}
+.por button{width:28px;height:28px;border:1px solid var(--line);border-radius:50%;background:none;cursor:pointer}
+.por button:hover{border-color:var(--ink)}
+.por b{min-width:76px;text-align:center;font-weight:500;color:var(--ink)}
+.shop{list-style:none;margin:0;padding:0;columns:2 230px;column-gap:26px}
+.shop li{break-inside:avoid;padding:6px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.shop label{display:flex;gap:9px;align-items:baseline;cursor:pointer}
+.shop input{accent-color:var(--ink)}
+.shop input:checked+span{text-decoration:line-through;color:var(--muted)}
+.steps{margin:0;padding-left:20px}
+.steps li{margin-bottom:8px}
+.note{border-left:2px solid var(--sug);padding:4px 0 4px 12px;color:var(--muted);font-size:.95rem;margin-top:16px!important}
+.figs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border:1px solid var(--line);border-radius:4px;padding:12px 10px 6px;margin-bottom:18px}
+.figs figure{margin:0;text-align:center}
+.figs svg{width:100%;max-width:190px;height:auto;display:block;margin:0 auto}
+.figs figcaption{font-size:.8rem;color:var(--muted)}
+.figs .arr{color:var(--muted);padding:0 6px}
+.kv{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 16px}
+.kv div{padding:10px 0}
+.kv div+div{border-left:1px solid var(--line);padding-left:16px}
+.kv dt{color:var(--muted);font-size:.8rem}
+.kv dd{margin:0;font:400 1.3rem var(--serif)}
+.alts{list-style:none;margin:0;padding:0}
+.alts li{padding:8px 0;border-top:1px solid var(--line)}
+.alts li:last-child{border-bottom:1px solid var(--line)}
+@media (max-width:560px){
+  dialog.md{width:100vw;max-width:100vw;margin:auto 0 0;border-radius:10px 10px 0 0;max-height:92vh;border-width:1px 0 0}
+  .md-in{max-height:92vh}
+  .md-h{padding:18px 20px 12px}
+  .md-b{padding:16px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+  .mac b{font-size:1.15rem}
+}
+
+/* figure strokes */
+.lm{stroke:var(--ink);stroke-width:3.2;stroke-linecap:round;fill:none}
+.torso{stroke-width:4.2}
+.far{opacity:.35}
+.hd{fill:var(--bg);stroke:var(--ink);stroke-width:3}
+.tp{fill:none;stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.eq,.hnd{fill:var(--eq)}
+.mach{fill:var(--line)}
+.ml{stroke:var(--line);stroke-width:4;stroke-linecap:round}
+.mt{stroke:var(--line);stroke-width:2;stroke-linecap:round}
+.plate{stroke:var(--eq);stroke-width:4;stroke-linecap:round}
+.cable{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:3 2}
+.pul{fill:var(--bg);stroke:var(--muted);stroke-width:1.6}
+.barl{stroke:var(--eq);stroke-width:3.4;stroke-linecap:round}
+.floor{stroke:var(--line);stroke-width:1.5}
+.ftxt{font:500 7px var(--sans);fill:var(--muted)}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topline">
+    <a href="https://tevfikkesici.com">← tevfikkesici.com</a>
+    <div class="tools">
+      <div class="langs" id="langs" role="group"><button data-l="tr" lang="tr">TR</button><button data-l="en" lang="en">EN</button></div>
+      <button class="themeb" id="themeb" type="button" aria-label="Temayı değiştir">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+  <h1>Fit</h1>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="t-antrenman" aria-controls="antrenman">Antrenman</button>
+    <button role="tab" id="t-beslenme" aria-controls="beslenme">Beslenme</button>
+  </nav>
+
+  <main>
+    <section id="antrenman" role="tabpanel" aria-labelledby="t-antrenman">
+      <div class="sub" id="progSeg"></div>
+      <div id="workouts"></div>
+    </section>
+    <section id="beslenme" role="tabpanel" aria-labelledby="t-beslenme" hidden>
+      <div id="slots"></div>
+    </section>
+  </main>
+</div>
+<dialog class="md" id="md"></dialog>
+
+<script>
+/* ---------- figure drawing ---------- */
+const L=(a,b,c='lm')=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" class="${c}"/>`;
+const db=at=>({t:'db',at}), hd=at=>({t:'h',at}), bar=at=>({t:'bar',at});
+function prop(p){
+  switch(p.t){
+    case 'db': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="4.6" class="eq"/>`;
+    case 'h': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="2.8" class="hnd"/>`;
+    case 'bar': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="7" class="eq"/>`;
+    case 'roll': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="4" class="mach"/>`;
+    case 'rect': return `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="1.5" class="mach"/>`;
+    case 'ln': return L(p.a,p.b,p.c||'ml');
+    case 'cable': return L(p.a,p.b,'cable');
+    case 'pul': return `<circle cx="${p.at[0]}" cy="${p.at[1]}" r="3.2" class="pul"/>`;
+    case 'barline': return L(p.a,p.b,'barl');
+    case 'txt': return `<text x="${p.at[0]}" y="${p.at[1]}" class="ftxt">${p.s}</text>`;
+  }
+  return '';
+}
+function side(P){
+  let o='';(P.bg||[]).forEach(x=>o+=prop(x));
+  if(P.k2){o+=L(P.p,P.k2,'lm far')+L(P.k2,P.a2,'lm far');if(P.t2)o+=L(P.a2,P.t2,'lm far');}
+  if(P.e2){o+=L(P.s,P.e2,'lm far')+L(P.e2,P.w2,'lm far');}
+  o+=L(P.s,P.h)+L(P.s,P.p,'lm torso')+L(P.p,P.k)+L(P.k,P.a);
+  const t=P.t===undefined?[P.a[0]+7,P.a[1]]:P.t; if(t)o+=L(P.a,t);
+  o+=L(P.s,P.e)+L(P.e,P.w);
+  o+=`<circle cx="${P.h[0]}" cy="${P.h[1]}" r="6" class="hd"/>`;
+  (P.fg||[]).forEach(x=>o+=prop(x));
+  return o;
+}
+function front(P){
+  let o='';(P.bg||[]).forEach(x=>o+=prop(x));
+  const n=[(P.sL[0]+P.sR[0])/2,(P.sL[1]+P.sR[1])/2];
+  o+=L(n,P.h);
+  o+=`<polygon points="${P.sL} ${P.sR} ${P.pR} ${P.pL}" class="tp"/>`;
+  o+=L(P.pL,P.kL)+L(P.kL,P.aL)+L(P.aL,[P.aL[0]-6,P.aL[1]])+L(P.pR,P.kR)+L(P.kR,P.aR)+L(P.aR,[P.aR[0]+6,P.aR[1]]);
+  o+=L(P.sL,P.eL)+L(P.eL,P.wL)+L(P.sR,P.eR)+L(P.eR,P.wR);
+  o+=`<circle cx="${P.h[0]}" cy="${P.h[1]}" r="6" class="hd"/>`;
+  (P.fg||[]).forEach(x=>o+=prop(x));
+  return o;
+}
+function fig(view,P,label){
+  return `<svg viewBox="0 0 120 120" role="img" aria-label="${label}"><line x1="2" y1="111" x2="118" y2="111" class="floor"/>${view==='side'?side(P):front(P)}</svg>`;
+}
+
+const ST={h:[60,22],s:[60,33],p:[60,62],k:[60,86],a:[60,110],e:[61,48],w:[62,63]};
+const FR={h:[60,20],sL:[48,32],sR:[72,32],pL:[53,62],pR:[67,62],kL:[52,86],kR:[68,86],aL:[50,110],aR:[70,110]};
+const FS={h:[60,30],sL:[48,42],sR:[72,42],pL:[53,72],pR:[67,72],kL:[50,80],kR:[70,80],aL:[49,108],aR:[71,108]};
+
+const LPbg=[{t:'ln',a:[12,63],b:[34,95]},{t:'ln',a:[36,98],b:[54,98]},{t:'ln',a:[44,98],b:[44,110],c:'mt'},{t:'ln',a:[58,108],b:[110,64],c:'mt'}];
+const BBench=[{t:'rect',x:12,y:86,w:26,h:6},{t:'ln',a:[16,92],b:[16,110],c:'mt'},{t:'ln',a:[34,92],b:[34,110],c:'mt'}];
+const FlatB=[{t:'rect',x:14,y:84,w:56,h:6},{t:'ln',a:[22,90],b:[22,110],c:'mt'},{t:'ln',a:[62,90],b:[62,110],c:'mt'}];
+const IncB=[{t:'ln',a:[25,57],b:[48,93]},{t:'ln',a:[46,95],b:[68,95]},{t:'ln',a:[56,95],b:[56,110],c:'mt'}];
+const CurlB=[{t:'rect',x:8,y:88,w:80,h:5},{t:'ln',a:[14,93],b:[14,110],c:'mt'},{t:'ln',a:[80,93],b:[80,110],c:'mt'}];
+const RowB=[{t:'ln',a:[47,90],b:[75,63]},{t:'ln',a:[58,80],b:[58,110],c:'mt'}];
+const SRowB=[{t:'ln',a:[24,97],b:[52,97]},{t:'ln',a:[38,97],b:[38,110],c:'mt'},{t:'ln',a:[81,86],b:[81,108]},{t:'pul',at:[108,90]}];
+const tower=(x,py)=>[{t:'ln',a:[x,6],b:[x,110],c:'mt'},{t:'pul',at:[x-2,py]}];
+
+const POSES={
+  goblet:{v:'side',
+    s:{...ST,e:[64,49],w:[69,38],fg:[db([71,38])]},
+    e:{h:[61,51],s:[57,62],p:[47,90],k:[69,90],a:[60,110],e:[62,77],w:[67,66],fg:[db([69,66])]}},
+  legpress:{v:'side',
+    s:{h:[14,60],s:[20,68],p:[40,92],k:[54,72],a:[72,80],t:[69,73],e:[26,83],w:[38,90],bg:[...LPbg,{t:'ln',a:[69,66],b:[79,92],c:'plate'}]},
+    e:{h:[14,60],s:[20,68],p:[40,92],k:[64,80],a:[88,70],t:[85,63],e:[26,83],w:[38,90],bg:[...LPbg,{t:'ln',a:[85,56],b:[97,82],c:'plate'}]}},
+  rdl:{v:'side',
+    s:{...ST,fg:[db([62,66])]},
+    e:{h:[90,52],s:[79,55],p:[50,64],k:[57,87],a:[60,110],e:[79,70],w:[79,85],fg:[db([79,88])]}},
+  bulgarian:{v:'side',
+    s:{h:[62,22],s:[62,33],p:[62,63],k:[70,86],a:[72,110],k2:[52,84],a2:[32,84],t2:[25,86],e:[62,48],w:[62,62],bg:BBench,fg:[db([62,65])]},
+    e:{h:[61,42],s:[60,53],p:[56,82],k:[78,88],a:[72,110],k2:[46,104],a2:[32,84],t2:[25,86],e:[63,68],w:[64,83],bg:BBench,fg:[db([64,86])]}},
+  hipthrust:{v:'side',
+    s:{h:[21,64],s:[28,72],p:[50,98],k:[72,84],a:[76,110],e:[38,88],w:[48,94],bg:[{t:'rect',x:4,y:73,w:24,h:37}],fg:[bar([50,92])]},
+    e:{h:[17,66],s:[28,72],p:[56,74],k:[76,82],a:[78,110],e:[42,80],w:[54,72],bg:[{t:'rect',x:4,y:73,w:24,h:37}],fg:[bar([56,67])]}},
+  legcurl:{v:'side',
+    s:{h:[12,81],s:[22,83],p:[52,83],k:[76,83],a:[98,83],t:[99,90],e:[20,95],w:[12,100],bg:CurlB,fg:[{t:'roll',at:[98,77]}]},
+    e:{h:[12,81],s:[22,83],p:[52,83],k:[76,83],a:[84,62],t:[91,63],e:[20,95],w:[12,100],bg:CurlB,fg:[{t:'roll',at:[79,58]}]}},
+  dbbench:{v:'side',
+    s:{h:[18,77],s:[28,80],p:[58,80],k:[80,80],a:[84,110],e:[38,92],w:[34,76],bg:FlatB,fg:[db([34,73])]},
+    e:{h:[18,77],s:[28,80],p:[58,80],k:[80,80],a:[84,110],e:[29,64],w:[30,48],bg:FlatB,fg:[db([30,45])]}},
+  incline:{v:'side',
+    s:{h:[30,53],s:[36,62],p:[56,88],k:[78,86],a:[82,110],e:[34,78],w:[40,64],bg:IncB,fg:[db([41,61])]},
+    e:{h:[30,53],s:[36,62],p:[56,88],k:[78,86],a:[82,110],e:[42,46],w:[46,31],bg:IncB,fg:[db([46,28])]}},
+  cablefly:{v:'front',
+    s:{...FR,eL:[33,34],wL:[18,40],eR:[87,34],wR:[102,40],bg:[...tower(6,16),...tower(114,16),{t:'cable',a:[4,16],b:[18,40]},{t:'cable',a:[112,16],b:[102,40]}],fg:[hd([18,40]),hd([102,40])]},
+    e:{...FR,eL:[42,46],wL:[56,52],eR:[78,46],wR:[64,52],bg:[...tower(6,16),...tower(114,16),{t:'cable',a:[4,16],b:[56,52]},{t:'cable',a:[112,16],b:[64,52]}],fg:[hd([56,52]),hd([64,52])]}},
+  latraise:{v:'front',
+    s:{...FR,eL:[45,48],wL:[44,63],eR:[75,48],wR:[76,63],fg:[db([44,65]),db([76,65])]},
+    e:{...FR,eL:[33,33],wL:[18,35],eR:[87,33],wR:[102,35],fg:[db([17,35]),db([103,35])]}},
+  pulldown:{v:'front',
+    s:{...FS,eL:[42,28],wL:[36,13],eR:[78,28],wR:[84,13],bg:[{t:'cable',a:[60,1],b:[60,13]},{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'barline',a:[24,13],b:[96,13]}]},
+    e:{...FS,eL:[34,54],wL:[40,40],eR:[86,54],wR:[80,40],bg:[{t:'cable',a:[60,1],b:[60,40]},{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'barline',a:[28,40],b:[92,40]}]}},
+  csrow:{v:'side',
+    s:{h:[75,50],s:[68,58],p:[44,82],k:[30,98],a:[16,110],t:[23,110],e:[68,74],w:[68,90],bg:RowB,fg:[db([68,93])]},
+    e:{h:[75,50],s:[68,58],p:[44,82],k:[30,98],a:[16,110],t:[23,110],e:[54,60],w:[58,76],bg:RowB,fg:[db([58,79])]}},
+  seatedrow:{v:'side',
+    s:{h:[39,51],s:[38,62],p:[40,92],k:[58,82],a:[76,94],t:[79,87],e:[54,66],w:[70,70],bg:[...SRowB,{t:'cable',a:[108,90],b:[70,70]}],fg:[hd([70,70])]},
+    e:{h:[39,51],s:[38,62],p:[40,92],k:[58,82],a:[76,94],t:[79,87],e:[24,70],w:[40,76],bg:[...SRowB,{t:'cable',a:[108,90],b:[40,76]}],fg:[hd([40,76])]}},
+  facepull:{v:'side',
+    s:{...ST,e:[76,34],w:[92,33],bg:[...tower(112,26),{t:'cable',a:[110,26],b:[92,33]}],fg:[hd([92,33])]},
+    e:{...ST,e:[50,25],w:[66,20],bg:[...tower(112,26),{t:'cable',a:[110,26],b:[66,20]}],fg:[hd([66,20])]}},
+  curl:{v:'side',
+    s:{...ST,fg:[db([62,66])]},
+    e:{...ST,w:[70,35],fg:[db([71,32])]}},
+  pushdown:{v:'side',
+    s:{...ST,e:[61,49],w:[74,41],bg:[...tower(100,8),{t:'cable',a:[98,8],b:[74,41]}],fg:[hd([74,41])]},
+    e:{...ST,e:[61,49],w:[64,65],bg:[...tower(100,8),{t:'cable',a:[98,8],b:[64,65]}],fg:[hd([64,65])]}},
+  deadbug:{v:'side',
+    s:{h:[16,102],s:[28,104],p:[60,104],k:[60,82],a:[82,82],t:[82,75],e:[28,88],w:[28,72],k2:[62,82],a2:[84,82],t2:[84,75],e2:[31,88],w2:[31,72]},
+    e:{h:[16,102],s:[28,104],p:[60,104],k:[82,100],a:[104,102],t:[106,95],e:[15,98],w:[3,95],k2:[60,82],a2:[82,82],t2:[82,75],e2:[30,88],w2:[30,72]}},
+  pallof:{v:'side',
+    s:{...ST,e:[63,48],w:[70,40],bg:[{t:'pul',at:[102,40]},{t:'txt',at:[86,54],s:'kablo yanda'}],fg:[hd([70,40])]},
+    e:{...ST,e:[76,35],w:[92,35],bg:[{t:'pul',at:[102,40]},{t:'txt',at:[86,54],s:'kablo yanda'}],fg:[hd([92,35])]}},
+  sideplank:{v:'side',
+    s:{h:[21,87],s:[30,92],p:[56,104],k:[80,106],a:[104,108],t:null,e:[30,108],w:[46,108],e2:[42,86],w2:[54,98]},
+    e:{h:[20,88],s:[30,92],p:[57,98],k:[80,103],a:[104,108],t:null,e:[30,108],w:[46,108],e2:[42,84],w2:[55,92]}},
+  farmer:{v:'side',
+    s:{...ST,fg:[db([62,66])]},
+    e:{h:[63,22],s:[62,33],p:[61,62],k:[67,86],a:[72,110],k2:[54,86],a2:[48,110],t2:[55,110],e:[63,48],w:[64,63],fg:[db([64,66])]}}
+};
+
+
+
+/* ---------- exercises ---------- */
+const EX={
+  goblet:{n:'Goblet squat',c:'Dumbbell’ı göğsüne yapıştır, kalçayı geri ve aşağı indir. Dizler ayak uçlarıyla aynı yöne baksın, göğüs dik kalsın.',alt:['Leg press','Smith machine squat','Box squat']},
+  legpress:{n:'Leg press',c:'Belin pedden kalkmayacak kadar derin in, üstte dizleri kilitleme. Başın pede yaslı kalsın.',alt:['Hack squat','Goblet squat','Belt squat']},
+  rdl:{n:'Dumbbell Romanian deadlift',c:'Kalçayı arkadaki duvara değdirecekmiş gibi geri it; dizler hafif bükük, sırt düz. Arka bacakta gerilme gelince kalk. Bakış yere çapraz.',alt:['Kettlebell RDL','Single-leg RDL','45° back extension']},
+  bulgarian:{n:'Bulgarian split squat',c:'Arka ayak benchte, ağırlık ön topukta. Dik in, ön topuktan iterek kalk. İlk haftalar dumbbell’sız başla.',alt:['Reverse lunge','Step-up','Split squat']},
+  hipthrust:{n:'Hip thrust',c:'Sırtın üst kısmı bench kenarında, topuklardan it, tepede kalçayı bir saniye sık. Çene hafif içeride.',alt:['Glute bridge','Machine hip thrust','Cable pull-through']},
+  legcurl:{n:'Leg curl',c:'Kontrollü bük, tepede bir saniye tut, iki üç saniyede indir.',alt:['Seated leg curl','Stability ball leg curl','Nordic curl (ileri seviye)']},
+  dbbench:{n:'Dumbbell bench press',c:'Kürek kemiklerini geri ve aşağı çek; dirsekler gövdeyle yaklaşık 45°. Dumbbell’lar göğüs hizasına insin.',alt:['Machine chest press','Barbell bench press','Push-up']},
+  incline:{n:'Incline dumbbell press',c:'Bench 30°. Dumbbell’ları üst göğüs hizasından yukarı it, tepede birbirine çarptırma.',alt:['Incline machine press','Smith machine incline press','Landmine press']},
+  cablefly:{n:'Cable fly',c:'Dirsekler hafif bükük, kucaklar gibi kapat; ortada göğsü sık, yavaşça aç.',alt:['Pec deck','Dumbbell fly','Low-to-high cable fly']},
+  latraise:{n:'Lateral raise',c:'Hafif ağırlık, kollar omuz hizasına kadar. Omuz silkerek kaldırıyorsan ağırlık fazla.',alt:['Cable lateral raise','Machine lateral raise','Band lateral raise']},
+  pulldown:{n:'Lat pulldown',c:'Barı önden köprücük kemiğine çek, dirsekleri aşağı ve geriye götür. Ense arkasına çekme.',alt:['Assisted pull-up','Single-arm cable pulldown','Pull-up']},
+  csrow:{n:'Chest-supported dumbbell row',c:'Göğsün pede yaslı; dirsekleri kalçana doğru çek, tepede kürek kemiklerini sık.',alt:['Machine row','Single-arm dumbbell row','Chest-supported T-bar row']},
+  seatedrow:{n:'Seated cable row',c:'Göğüs dik, omuzlar aşağıda; sapı göbeğine çek, gövdeyle sallanma.',alt:['Machine row','Single-arm cable row','Band row']},
+  facepull:{n:'Face pull',c:'Halatı yüzüne çek; dirsekler yüksek ve dışa açık. Arka omuz ve duruş için.',alt:['Band face pull','Reverse pec deck','Incline reverse fly']},
+  curl:{n:'Biceps curl',c:'Dirsekler gövdede sabit, sallanma yok; iniş iki saniye.',alt:['Hammer curl','Cable curl','Incline dumbbell curl']},
+  pushdown:{n:'Triceps pushdown',c:'Dirsekler gövdeye yapışık, yalnızca ön kol hareket eder.',alt:['Rope pushdown','Single-arm cable pushdown','Dumbbell kickback']},
+  deadbug:{n:'Dead bug',c:'Bel yere yapışık. Karşı kol ve bacağı nefes vererek yavaşça uzat, geri gel, taraf değiştir. Baş yerde kalsın.',alt:['Bird dog','Reverse crunch','Hollow hold']},
+  pallof:{n:'Pallof press',c:'Kablo yandan çekerken kolları göğüsten öne uzat; gövdenin dönmesine izin verme. İki saniye tut.',alt:['Band Pallof press','Half-kneeling Pallof press','Suitcase carry']},
+  sideplank:{n:'Side plank',c:'Dirsek omuzun tam altında; baş, kalça ve topuk tek çizgi. Zorlanırsan dizleri yere koy.',alt:['Kneeling side plank','Suitcase carry','Copenhagen plank (ileri seviye)']},
+  farmer:{n:'Farmer’s walk',c:'Ağır dumbbell’larla dik yürü; omuzlar geride ve aşağıda. Kavrama, bilek ve gövde aynı anda çalışır.',alt:['Suitcase carry','Trap bar carry','Kettlebell carry']}
+};
+const PROGRAMS={
+  p4:{label:'Bölgesel',days:[
+    {t:'Üst vücut 1',d:'≈55 dk',x:[['dbbench','4 × 6–10','2–3 dk'],['csrow','4 × 8–12','2 dk'],['incline','3 × 10–12','90 sn'],['pulldown','3 × 10–12','90 sn'],['latraise','3 × 12–15','60 sn'],['curl','2 × 12','60 sn'],['pushdown','2 × 12','60 sn']]},
+    {t:'Alt vücut 1',d:'≈50 dk',x:[['goblet','4 × 8–12','2 dk'],['rdl','3 × 8–10','2 dk'],['bulgarian','3 × 8–10 her bacak','90 sn'],['legcurl','3 × 10–12','60 sn'],['deadbug','3 × 6 her taraf','45 sn']]},
+    {t:'Üst vücut 2',d:'≈55 dk',x:[['incline','4 × 8–10','2 dk'],['seatedrow','4 × 10–12','90 sn'],['cablefly','3 × 12–15','60 sn'],['pulldown','3 × 10–12','90 sn'],['facepull','3 × 15','60 sn'],['latraise','2 × 15','60 sn']]},
+    {t:'Alt vücut 2',d:'≈50 dk',x:[['legpress','4 × 10–12','2 dk'],['hipthrust','4 × 8–12','2 dk'],['legcurl','3 × 12','60 sn'],['pallof','3 × 10 her taraf','45 sn'],['sideplank','3 × 30 sn her taraf','45 sn'],['farmer','3 × 30 m','60 sn']]}
+  ]},
+  p3:{label:'Full body',days:[
+    {t:'Full body A',d:'≈55 dk',x:[['goblet','3 × 8–12','2 dk'],['dbbench','3 × 8–12','2 dk'],['csrow','3 × 10–12','90 sn'],['rdl','3 × 8–10','2 dk'],['latraise','2 × 12–15','60 sn'],['deadbug','3 × 6 her taraf','45 sn']]},
+    {t:'Full body B',d:'≈55 dk',x:[['legpress','3 × 10–12','2 dk'],['incline','3 × 8–12','2 dk'],['pulldown','3 × 10–12','90 sn'],['hipthrust','3 × 8–12','2 dk'],['facepull','3 × 15','60 sn'],['pallof','3 × 10 her taraf','45 sn']]},
+    {t:'Full body C',d:'≈65 dk',x:[['bulgarian','3 × 8–10 her bacak','90 sn'],['dbbench','3 × 10–12','2 dk'],['seatedrow','3 × 10–12','90 sn'],['legcurl','3 × 10–12','60 sn'],['cablefly','2 × 12–15','60 sn'],['curl','2 × 12','60 sn'],['pushdown','2 × 12','60 sn'],['sideplank','3 × 30 sn her taraf','45 sn'],['farmer','3 × 30 m','60 sn']]}
+  ]}
+};
+
+/* ---------- meals ---------- */
+const MEALS={
+  m1:{n:'Fırında tavuk but, bulgur, fırın sebze',m:'Fırın',c:47,p:75,f:34,s:8,g:'low',base:3,keep:'Buzdolabında 3 gün',go:1,
+    ing:[[900,'g','derisiz kemiksiz tavuk but'],[210,'g','pilavlık bulgur'],[2,'','kabak'],[2,'','kırmızı biber'],[1,'','soğan'],[6,'yk','yoğurt'],[1,'yk','biber salçası'],[3,'yk','zeytinyağı'],[null,'','kimyon, pul biber, tuz']],
+    steps:['Tavuğu yoğurt, salça, baharat ve 1 yk zeytinyağıyla karıştır; en az 30 dk buzdolabında beklet.','Sebzeleri iri doğra, kalan yağla tepsiye yay, tavukları üstüne diz.','200°C fırında 35–40 dk, üstü kızarana kadar pişir.','Bu sırada bulguru 1’e 2 suyla 15 dk pişir, 10 dk demlendir.','Porsiyonlara bölüp saklama kaplarına koy.']},
+  m2:{n:'Etli yeşil mercimek, yoğurt',m:'Ocak',c:56,p:68,f:28,s:12,g:'low',base:4,keep:'3 gün; bir porsiyonu dondurabilirsin',go:1,
+    ing:[[600,'g','dana kuşbaşı'],[320,'g','yeşil mercimek'],[1,'','soğan'],[1,'','havuç'],[1,'yk','domates salçası'],[1,'yk','zeytinyağı'],[800,'g','yoğurt'],[null,'','tuz, karabiber, pul biber']],
+    steps:['Mercimeği yıka ve süz.','Eti zeytinyağında, suyunu salıp çekene kadar kavur.','Doğranmış soğan ve havucu ekle, 3 dk çevir; salçayı ekle.','Mercimek ve 3 su bardağı sıcak suyu ekle, kısık ateşte 35–40 dk pişir.','Her porsiyonu 200 g yoğurtla servis et.']},
+  m3:{n:'Airfryer köfte, nohut salatası',m:'Airfryer',c:46,p:63,f:39,s:7,g:'low',base:3,keep:'Köfte 3 gün; salata sossuz 2 gün',go:1,
+    ing:[[750,'g','yağsız dana kıyma'],[1,'','soğan'],[1,'','yumurta'],[3,'yk','yulaf ezmesi'],[450,'g','haşlanmış nohut'],[3,'','domates'],[1,'demet','roka'],[1,'demet','maydanoz'],[3,'yk','zeytinyağı'],[1,'','limon'],[null,'','kimyon, tuz, karabiber']],
+    steps:['Soğanı rendele, suyunu sık.','Kıyma, soğan, yumurta, yulaf ve baharatı 3 dk yoğur; 30 dk buzdolabında dinlendir.','Köfte şekli ver; airfryer 190°C’de 12–14 dk, yarıda çevir.','Nohut, domates, roka ve maydanozu karıştır.','Zeytinyağı, limon ve tuzla sosu ayrı kapta hazırla; yemeden önce dök.']},
+  m16:{n:'Etli taze fasulye, bulgur',m:'Ocak',c:62,p:50,f:23,s:14,g:'low',base:4,keep:'3 gün',go:1,
+    ing:[[600,'g','dana kuşbaşı'],[1600,'g','taze fasulye'],[1,'','soğan'],[3,'','domates'],[1,'yk','domates salçası'],[2,'yk','zeytinyağı'],[240,'g','pilavlık bulgur'],[null,'','tuz, karabiber']],
+    steps:['Fasulyelerin uçlarını ayıkla, ikiye ya da üçe kır.','Eti zeytinyağında suyunu çekene kadar kavur; doğranmış soğanı ekle.','Salça ve rendelenmiş domatesi ekle, 2 dk çevir.','Fasulyeyi ve 1 su bardağı sıcak suyu ekle, kapağı kapalı kısık ateşte 40 dk pişir.','Bulguru 1’e 2 suyla 15 dk pişir.']},
+  m5:{n:'Chili con carne (fasulyeli kıyma)',m:'Ocak',c:60,p:61,f:30,s:14,g:'low',base:4,keep:'4 gün; çok iyi donar',go:1,
+    ing:[[800,'g','kıyma (%10 yağlı)'],[720,'g','haşlanmış barbunya'],[800,'g','küp doğranmış domates (konserve)'],[2,'','soğan'],[2,'','kırmızı biber'],[3,'diş','sarımsak'],[2,'tk','kimyon'],[1,'yk','toz kırmızı biber'],[1,'yk','zeytinyağı'],[600,'g','yoğurt']],
+    steps:['Kıymayı yağda suyunu çekene kadar kavur.','Doğranmış soğan, biber ve sarımsağı ekle, 5 dk pişir.','Baharatları ekle, 1 dk kavur.','Domates ve barbunyayı ekle, kısık ateşte 30 dk kaynat.','Her kaseyi 150 g yoğurtla servis et.']},
+  m6:{n:'Airfryer tavuk şiş, bulgur, cacık',m:'Airfryer',c:50,p:80,f:18,s:9,g:'low',base:3,keep:'3 gün',go:1,
+    ing:[[750,'g','tavuk göğsü'],[210,'g','pilavlık bulgur'],[600,'g','yoğurt'],[2,'','salatalık'],[2,'diş','sarımsak'],[2,'yk','zeytinyağı'],[null,'','kekik, tuz, karabiber']],
+    steps:['Tavuğu küp doğra; 150 g yoğurt, zeytinyağı, kekik ve 1 diş sarımsakla en az 1 saat marine et.','Şişlere diz ya da düz yay; airfryer 200°C’de 12–15 dk.','Bulguru 1’e 2 suyla 15 dk pişir.','Kalan yoğurdu rendelenmiş salatalık, sarımsak ve tuzla cacık yap.']},
+  m7:{n:'Döküm tavada antrikot, fırın sebze, salata',m:'Döküm tava',c:15,p:72,f:59,s:7,g:'low',base:1,keep:'Taze ye',go:0,note:'Yağlı ve proteinli öğünlerde kan şekeri 2–4 saat sonra yavaşça yükselebilir.',
+    ing:[[300,'g','antrikot'],[1,'yk','tereyağı'],[2,'diş','sarımsak'],[1,'dal','taze biberiye'],[1,'','kabak'],[1,'','kırmızı biber'],[150,'g','mantar'],[1,'kase','yeşil salata'],[1,'yk','zeytinyağı'],[null,'','iri tuz, karabiber']],
+    steps:['Eti 30 dk önce buzdolabından çıkar, kurula ve tuzla.','Sebzeleri zeytinyağıyla 200°C fırında 20 dk pişir.','Döküm tavayı dumanlayana kadar ısıt; eti her yüzü 3–4 dk pişir.','Son dakikada tereyağı, sarımsak ve biberiyeyi ekle, kaşıkla etin üstüne dök.','5 dk dinlendir, salatayla servis et.']},
+  m8:{n:'Fırında kıymalı patlıcan, yoğurt, bulgur',m:'Fırın',c:58,p:52,f:36,s:18,g:'low',base:3,keep:'3 gün',go:1,
+    ing:[[6,'','patlıcan'],[600,'g','kıyma'],[1,'','soğan'],[3,'','domates'],[3,'','sivri biber'],[1,'yk','domates salçası'],[2,'yk','zeytinyağı'],[600,'g','yoğurt'],[130,'g','pilavlık bulgur']],
+    steps:['Patlıcanları alacalı soy, yağ sürüp 220°C fırında 20 dk pişir.','Kıymayı soğanla kavur; domates, biber ve salçayı ekle, 10 dk pişir.','Patlıcanların ortasını aç, harcı doldur, 20 dk daha fırınla.','Bulguru pişir; yoğurtla servis et.']},
+  m9:{n:'Tavuklu sebze sote, karabuğday',m:'Ocak',c:55,p:85,f:18,s:8,g:'lowmid',base:3,keep:'3 gün',go:1,
+    ing:[[750,'g','tavuk göğsü'],[210,'g','karabuğday'],[1,'','kabak'],[2,'','kırmızı biber'],[250,'g','mantar'],[2,'diş','sarımsak'],[1,'parça','taze zencefil'],[2,'yk','soya sosu'],[2,'yk','zeytinyağı']],
+    steps:['Karabuğdayı yıka, 1’e 2 suyla 15 dk haşla.','Tavuğu şerit doğra, geniş tavada yüksek ateşte sotele, kenara al.','Aynı tavada sebzeleri 5 dk çevir; sarımsak ve rendelenmiş zencefili ekle.','Tavuğu ve soya sosunu ekle, 2 dk karıştır.']},
+  m11:{n:'Tavuklu tam buğday makarna salatası',m:'Ocak',c:71,p:81,f:27,s:7,g:'mid',base:3,keep:'3 gün',go:1,note:'Listedeki en yüksek karbonhidratlı öğün; antrenman olan günlere uygun.',
+    ing:[[270,'g','tam buğday makarna'],[600,'g','tavuk göğsü'],[120,'g','beyaz peynir'],[250,'g','çeri domates'],[2,'','salatalık'],[1,'','kırmızı biber'],[1,'demet','roka'],[3,'yk','zeytinyağı'],[1,'','limon'],[null,'','kekik, tuz']],
+    steps:['Makarnayı al dente haşla, soğuk sudan geçir. Soğuyan makarnada dirençli nişasta artar, şekeri daha yavaş yükseltir.','Tavuğu kekik ve tuzla airfryer’da 200°C 15 dk ya da tavada pişir, doğra.','Sebzeleri doğra, peyniri ufala.','Hepsini zeytinyağı ve limonla karıştır.']},
+  m13:{n:'Dana sote, bulgur',m:'Döküm tava',c:51,p:70,f:29,s:9,g:'low',base:3,keep:'3 gün',go:1,
+    ing:[[660,'g','dana kuşbaşı'],[300,'g','mantar'],[2,'','kırmızı biber'],[1,'','soğan'],[210,'g','pilavlık bulgur'],[2,'yk','zeytinyağı'],[null,'','kekik, karabiber, tuz']],
+    steps:['Eti döküm tavada yüksek ateşte, parti parti mühürle; kalabalık olursa suyunu salıp haşlanır.','Eti kenara al; aynı tavada soğan, biber ve mantarı çevir.','Eti geri koy, kekik ve karabiberle 5 dk pişir.','Bulguru 1’e 2 suyla pişir.']},
+  m15:{n:'Tavuklu nohut yemeği, yoğurt',m:'Ocak',c:62,p:78,f:30,s:11,g:'low',base:4,keep:'4 gün; donar',go:1,
+    ing:[[1000,'g','tavuk (göğüs ve but karışık)'],[720,'g','haşlanmış nohut'],[1,'','soğan'],[2,'','domates'],[1,'yk','domates salçası'],[2,'yk','zeytinyağı'],[600,'g','yoğurt'],[null,'','pul biber, tuz']],
+    steps:['Tavuğu kuşbaşı doğra, yağda kavur.','Soğanı ekle, yumuşayınca salça ve rendelenmiş domatesi ekle.','Nohut ve 2 su bardağı sıcak suyu ekle, kısık ateşte 20 dk.','Yoğurtla servis et.']},
+  n1:{n:'Fırında sebzeli frittata, çavdar ekmeği',m:'Fırın',c:29,p:45,f:34,s:8,g:'lowmid',base:3,keep:'3 gün; soğuk da yenir',go:1,
+    ing:[[9,'','yumurta'],[300,'g','lor peyniri'],[90,'g','rendelenmiş kaşar'],[200,'g','ıspanak'],[200,'g','mantar'],[1,'','kırmızı biber'],[3,'dal','taze soğan'],[1,'yk','zeytinyağı'],[3,'dilim','çavdar ekmeği']],
+    steps:['Sebzeleri doğra, tavada 5 dk sotele.','Yumurtaları çırp, lor ve kaşarı ekle.','Sebzeleri karışıma ekle, yağlanmış fırın kabına dök.','180°C fırında 25 dk, ortası pişene kadar.','Ilıyınca dilimle; her porsiyonu bir dilim ekmekle kutula.']},
+  n2:{n:'Tavuklu tam buğday dürüm',m:'Airfryer',c:41,p:77,f:18,s:8,g:'mid',base:3,keep:'Tavuk 3 gün; dürümü yiyeceğin gün sar',go:1,
+    ing:[[600,'g','tavuk göğsü'],[3,'','tam buğday lavaş'],[300,'g','yoğurt'],[90,'g','beyaz peynir'],[0.5,'','marul'],[2,'','domates'],[1,'','salatalık'],[1,'diş','sarımsak'],[null,'','pul biber, kekik, kimyon']],
+    steps:['Tavuğu ince şerit kes, baharatla karıştır.','Airfryer 200°C’de 12 dk ya da tavada pişir.','Yoğurt, ezilmiş sarımsak ve tuzla sos yap.','İşe götüreceksen tavuğu ve sebzeleri ayrı kutuya koy, lavaşı işte sar; ıslanmaz.']},
+  s1:{n:'Süzme yoğurt, ceviz, tarçın',m:'Pişirmesiz',c:12,p:27,f:16,s:9,g:'low',base:1,go:1,
+    ing:[[250,'g','az yağlı süzme yoğurt'],[15,'g','ceviz'],[null,'','tarçın']],steps:['Yoğurdu kaba al, cevizi kır, tarçın serp.']},
+  s2:{n:'2 haşlanmış yumurta, 1 elma',m:'Ocak',c:23,p:13,f:10,s:17,g:'low',base:1,go:1,
+    ing:[[2,'','yumurta'],[1,'','elma']],steps:['Yumurtaları kaynar suda 9 dk haşla.','Hafta başında 6–8 tane haşlayıp kabuklu saklarsan 5 gün dayanır.']},
+  s3:{n:'Lor, tam buğday ekmek, domates',m:'Pişirmesiz',c:25,p:22,f:6,s:5,g:'mid',base:1,go:1,
+    ing:[[150,'g','lor peyniri'],[1,'dilim','tam buğday ekmeği'],[1,'','domates'],[1,'','salatalık']],steps:['Lora biraz kekik ve zeytinyağı damlatabilirsin; sebzeleri doğra.']},
+  s4:{n:'Kefir, badem',m:'Pişirmesiz',c:19,p:15,f:22,s:15,g:'low',base:1,go:1,
+    ing:[[300,'ml','sade kefir'],[25,'g','çiğ badem']],steps:['Hazır. Aromalı kefir değil, sade al.']},
+  s5:{n:'Fıstık ezmeli tam buğday ekmek, muz, ayran',m:'Pişirmesiz',c:41,p:17,f:16,s:17,g:'mid',base:1,go:1,note:'Antrenmandan 45–60 dk önce iyi bir seçim.',
+    ing:[[1,'dilim','tam buğday ekmeği'],[20,'g','saf yer fıstığı ezmesi'],[0.5,'','muz'],[250,'ml','ayran']],steps:['Ekmeğe fıstık ezmesini sür, muzu dilimleyip üstüne diz.','Antrenmandan 45–60 dk önce ayranla birlikte ye.']},
+  s6:{n:'Humus, sebze çubukları, yumurta',m:'Pişirmesiz',c:20,p:12,f:13,s:6,g:'low',base:1,go:1,
+    ing:[[80,'g','humus'],[1,'','havuç'],[1,'','salatalık'],[1,'','haşlanmış yumurta']],steps:['Sebzeleri çubuk doğra.','Evde humus: 400 g haşlanmış nohut, 3 yk tahin, 1 limon, 1 diş sarımsak ve biraz suyu rondoda çek; 5 gün dayanır.']},
+  s7:{n:'Beyaz peynir, ceviz, salatalık',m:'Pişirmesiz',c:8,p:12,f:22,s:5,g:'low',base:1,go:1,
+    ing:[[60,'g','beyaz peynir'],[15,'g','ceviz'],[1,'','salatalık'],[1,'','domates']],steps:['Doğra ve kutula.']},
+  s8:{n:'Fıstık ezmeli kakaolu kefir (blender)',m:'Blender',c:29,p:17,f:22,s:15,g:'low',base:3,keep:'Buzdolabında 3 gün; içmeden çalkala',go:1,note:'Sıvı olduğu için katı yemekten biraz daha hızlı emilir. Şekeri düşük tutmak için muz, bal ya da hurma ekleme.',
+    ing:[[900,'ml','sade kefir'],[3,'yk','saf yer fıstığı ezmesi'],[3,'tk','şekersiz kakao'],[3,'yk','chia tohumu'],[150,'g','dondurulmuş çilek'],[null,'','tarçın']],
+    steps:['Hepsini blendera koy, 30–40 sn çek.','Üç cam şişeye ya da kavanoza böl, buzdolabına kaldır.','Chia zamanla kıvamı koyulaştırır; içmeden önce çalkala, çok koyulaşırsa biraz su ekle.']},
+  b1:{n:'Menemen, peynir, tam tahıllı ekmek',m:'Ocak',c:27,p:29,f:32,s:9,g:'mid',base:1,go:0,
+    ing:[[3,'','yumurta'],[2,'','domates'],[2,'','sivri biber'],[40,'g','beyaz peynir'],[1,'dilim','tam tahıllı ekmek'],[1,'tk','zeytinyağı'],[null,'','maydanoz, pul biber']],
+    steps:['Biberleri yağda 3 dk sotele.','Rendelenmiş domatesi ekle, suyunu çekene kadar pişir.','Yumurtaları kır, hafifçe karıştırıp kısık ateşte pişir.']},
+  b2:{n:'Yulaf lapası, 2 haşlanmış yumurta',m:'Ocak',c:62,p:30,f:28,s:20,g:'mid',base:1,go:0,note:'İnce, hızlı pişen yulaf yerine iri yulaf kullan; şekeri daha yavaş yükseltir.',
+    ing:[[60,'g','iri yulaf'],[250,'ml','yarım yağlı süt'],[15,'g','ceviz'],[80,'g','yaban mersini (dondurulmuş olur)'],[2,'','yumurta'],[null,'','tarçın']],
+    steps:['Yulafı sütle kısık ateşte 5–7 dk pişir.','Bu arada yumurtaları 9 dk haşla.','Lapayı ceviz, yaban mersini ve tarçınla servis et; yumurtalar yanında.']},
+  b3:{n:'Mantarlı ıspanaklı omlet, avokado',m:'Ocak',c:14,p:28,f:43,s:3,g:'low',base:1,go:0,
+    ing:[[3,'','yumurta'],[100,'g','mantar'],[50,'g','ıspanak'],[30,'g','kaşar'],[0.5,'','avokado'],[1,'tk','zeytinyağı']],
+    steps:['Mantarı yağda 4 dk, ıspanağı 1 dk sotele.','Çırpılmış yumurtayı dök, kaşarı serp, kapağı kapatıp kısık ateşte pişir.','Dilimlenmiş avokadoyla servis et.']},
+  b4:{n:'Mini serpme kahvaltı',m:'Pişirmesiz',c:32,p:27,f:39,s:7,g:'lowmid',base:1,go:0,
+    ing:[[2,'','yumurta'],[60,'g','beyaz peynir'],[8,'','zeytin'],[1,'','domates'],[1,'','salatalık'],[15,'g','ceviz'],[1,'dilim','çavdar ekmeği']],
+    steps:['Yumurtaları 9 dk haşla, gerisini tabağa diz.']},
+  g1:{n:'Kefir',m:'Pişirmesiz',c:12,p:8,f:8,s:12,g:'low',base:1,go:0,ing:[[250,'ml','sade kefir']],steps:['Hazır.']},
+  g2:{n:'Süzme yoğurt, tarçın',m:'Pişirmesiz',c:8,p:20,f:4,s:7,g:'low',base:1,go:0,ing:[[200,'g','az yağlı süzme yoğurt'],[null,'','tarçın']],steps:['Hazır.']},
+  g3:{n:'Ayran, 2 haşlanmış yumurta',m:'Pişirmesiz',c:9,p:20,f:15,s:8,g:'low',base:1,go:0,note:'Koşu olan günlerde yanına 1 dilim çavdar ekmeği eklenebilir.',
+    ing:[[2,'','yumurta'],[250,'ml','ayran']],steps:['Hafta başında haşlanmış yumurtaların varsa hazır.']},
+  g4:{n:'Lor, ceviz',m:'Pişirmesiz',c:5,p:19,f:12,s:3,g:'low',base:1,go:0,ing:[[150,'g','lor peyniri'],[10,'g','ceviz']],steps:['Karıştır, istersen tarçın serp.']}
+};
+const kcal=m=>Math.round(m.c*4+m.p*4+m.f*9);
+// aktif hazırlık (dk), pişirme/bekleme hariç
+const EFF={m1:10,m2:15,m3:25,m16:25,m5:15,m6:20,m7:10,m8:40,m9:20,m11:25,m13:20,m15:10,n1:20,n2:20,s1:2,s2:2,s3:3,s4:1,s5:3,s6:5,s7:3,s8:5,b1:10,b2:5,b3:10,b4:5,g1:1,g2:1,g3:2,g4:2};
+const eff=id=>EFF[id]<=15?'g':EFF[id]<=30?'y':'r';
+const EFL={g:'Kolay',y:'Biraz uğraştırır',r:'Ciddi hazırlık'};
+const GIL={low:'Düşük GI',mid:'Orta GI',lowmid:'Düşük–orta GI',high:'Yüksek GI'};
+const MAINS_GO=['m1','m2','m3','m16','m5','m6','m8','m9','m11','m13','m15','n1','n2'];
+const MAINS_ALL=['m7','m1','m2','m3','m16','m5','m6','m8','m9','m11','m13','m15','n1','n2'];
+const SNACKS=['s8','s1','s2','s3','s4','s5','s6','s7'];
+const NIGHT=['g3','g2','g1','g4','s8'];
+
+const SLOTS=[
+  {t:'12:30',n:'Öğle',o:[...MAINS_GO,'b1','b2','b3','b4']},
+  {t:'16:30',n:'Ara öğün',o:SNACKS},
+  {t:'20:30',n:'Akşam',o:MAINS_ALL},
+  {t:'22:00',n:'Gece',o:NIGHT}
+];
+
+/* ---------- helpers ---------- */
+const store={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const dlg=document.getElementById('md');
+function openDialog(title,body){
+  dlg.innerHTML=`<div class="md-in"><div class="md-h"><h2>${title}</h2><button class="md-x" aria-label="${T().close}">×</button></div><div class="md-b">${body}</div></div>`;
+  dlg.querySelector('.md-x').onclick=()=>dlg.close();
+  dlg.showModal();
+}
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
+
+/* ---------- i18n ---------- */
+const UI={
+  tr:{tabT:'Antrenman',tabN:'Beslenme',start:'Başlangıç',end:'Bitiş',sets:'Set × tekrar',rest:'Dinlenme',alts:'Alternatifler',shop:'Alışveriş listesi',recipe:'Tarif',por:n=>`${n} porsiyon`,c:'karb g',p:'protein g',f:'yağ g',s:'şeker g',prep:m=>`aktif hazırlık ≈${m} dk`,bf:'Kahvaltı',go:'İşe götürülür',close:'Kapat',less:'Porsiyon azalt',more:'Porsiyon artır',toLight:'Açık temaya geç',toDark:'Koyu temaya geç',light:'Açık tema',dark:'Koyu tema',eff:{g:'Kolay',y:'Biraz uğraştırır',r:'Ciddi hazırlık'},gi:{low:'Düşük GI',mid:'Orta GI',lowmid:'Düşük–orta GI',high:'Yüksek GI'},slots:['Öğle','Ara öğün','Akşam','Gece'],langs:'Dil'},
+  en:{tabT:'Training',tabN:'Nutrition',start:'Start',end:'Finish',sets:'Sets × reps',rest:'Rest',alts:'Alternatives',shop:'Shopping list',recipe:'Recipe',por:n=>`${n} serving${n>1?'s':''}`,c:'carbs g',p:'protein g',f:'fat g',s:'sugar g',prep:m=>`≈${m} min active prep`,bf:'Breakfast',go:'Packs for work',close:'Close',less:'Fewer servings',more:'More servings',toLight:'Switch to light theme',toDark:'Switch to dark theme',light:'Light theme',dark:'Dark theme',eff:{g:'Easy',y:'Some effort',r:'Serious prep'},gi:{low:'Low GI',mid:'Medium GI',lowmid:'Low–medium GI',high:'High GI'},slots:['Lunch','Snack','Dinner','Late night'],langs:'Language'}
+};
+const METHOD_EN={'Fırın':'Oven','Ocak':'Stovetop','Airfryer':'Air fryer','Döküm tava':'Cast iron','Pişirmesiz':'No-cook','Blender':'Blender'};
+const PROG_EN={'Bölgesel':'Split','Full body':'Full body','Üst vücut 1':'Upper body 1','Alt vücut 1':'Lower body 1','Üst vücut 2':'Upper body 2','Alt vücut 2':'Lower body 2','Full body A':'Full body A','Full body B':'Full body B','Full body C':'Full body C'};
+const EX_EN={
+  goblet:'Hold the dumbbell against your chest and sit your hips back and down. Knees track over your toes, chest stays up.',
+  legpress:'Go as deep as you can without your lower back lifting off the pad, and don’t lock your knees at the top. Keep your head on the pad.',
+  rdl:'Push your hips back as if touching a wall behind you; knees slightly bent, back flat. Stand up once you feel the stretch in your hamstrings. Gaze diagonally at the floor.',
+  bulgarian:'Rear foot on the bench, weight on the front heel. Lower straight down and drive up through the front heel. Start without dumbbells for the first weeks.',
+  hipthrust:'Upper back on the edge of the bench; drive through your heels and squeeze your glutes for a second at the top. Keep your chin slightly tucked.',
+  legcurl:'Curl under control, hold for a second at the top, lower over two to three seconds.',
+  dbbench:'Pull your shoulder blades back and down, elbows about 45° from your torso. Lower the dumbbells to chest level.',
+  incline:'Bench at 30°. Press the dumbbells up from upper-chest level without clanking them together at the top.',
+  cablefly:'Elbows slightly bent, bring your hands together as if hugging; squeeze your chest in the middle and open slowly.',
+  latraise:'Light weight, arms up to shoulder height. If you have to shrug to lift it, the weight is too heavy.',
+  pulldown:'Pull the bar to your collarbone in front, driving your elbows down and back. Never behind the neck.',
+  csrow:'Chest against the pad; pull your elbows toward your hips and squeeze your shoulder blades at the top.',
+  seatedrow:'Chest up, shoulders down; pull the handle to your belly without rocking your torso.',
+  facepull:'Pull the rope toward your face with elbows high and wide. Great for rear delts and posture.',
+  curl:'Elbows fixed at your sides, no swinging; take two seconds on the way down.',
+  pushdown:'Elbows pinned to your sides; only your forearms move.',
+  deadbug:'Lower back pressed into the floor. Slowly extend the opposite arm and leg as you exhale, come back and switch sides. Keep your head down.',
+  pallof:'With the cable pulling from the side, press your hands straight out from your chest without letting your torso rotate. Hold for two seconds.',
+  sideplank:'Elbow directly under your shoulder; head, hips and heels in one line. Drop to your knees if needed.',
+  farmer:'Walk tall with heavy dumbbells, shoulders back and down. Grip, wrists and core all work at once.'
+};
+const MEALS_EN={
+  m1:{n:'Oven-baked chicken thighs, bulgur, roasted vegetables',keep:'3 days in the fridge',steps:['Mix the chicken with the yogurt, pepper paste, spices and 1 tbsp olive oil; marinate in the fridge for at least 30 min.','Cut the vegetables into large pieces, spread them on a tray with the remaining oil and lay the chicken on top.','Bake at 200°C for 35–40 min until browned.','Meanwhile cook the bulgur in twice its volume of water for 15 min, then let it rest for 10 min.','Divide into portions and pack into containers.']},
+  m2:{n:'Green lentil stew with beef, yogurt',keep:'3 days; one portion can be frozen',steps:['Rinse and drain the lentils.','Brown the beef in olive oil until its juices evaporate.','Add the chopped onion and carrot, stir for 3 min, then add the tomato paste.','Add the lentils and 3 cups of hot water and simmer on low heat for 35–40 min.','Serve each portion with 200 g yogurt.']},
+  m3:{n:'Air fryer meatballs, chickpea salad',keep:'Meatballs 3 days; salad without dressing 2 days',steps:['Grate the onion and squeeze out the juice.','Knead the beef, onion, egg, oats and spices for 3 min; rest in the fridge for 30 min.','Shape into meatballs and air fry at 190°C for 12–14 min, flipping halfway.','Mix the chickpeas, tomatoes, arugula and parsley.','Make the dressing with olive oil, lemon and salt in a separate container and pour it on just before eating.']},
+  m16:{n:'Green beans with beef, bulgur',keep:'3 days',steps:['Trim the green beans and snap them into two or three pieces.','Brown the beef in olive oil until the juices evaporate, then add the chopped onion.','Add the tomato paste and grated tomatoes and stir for 2 min.','Add the beans and 1 cup of hot water, cover and simmer on low heat for 40 min.','Cook the bulgur in twice its volume of water for 15 min.']},
+  m5:{n:'Chili con carne',keep:'4 days; freezes very well',steps:['Brown the ground beef in oil until the juices evaporate.','Add the chopped onions, peppers and garlic and cook for 5 min.','Add the spices and toast for 1 min.','Add the tomatoes and beans and simmer on low heat for 30 min.','Serve each bowl with 150 g yogurt.']},
+  m6:{n:'Air fryer chicken skewers, bulgur, cacık',keep:'3 days',steps:['Cube the chicken and marinate it with 150 g yogurt, olive oil, oregano and 1 clove of garlic for at least 1 hour.','Thread onto skewers or spread flat; air fry at 200°C for 12–15 min.','Cook the bulgur in twice its volume of water for 15 min.','Mix the remaining yogurt with grated cucumber, garlic and salt to make cacık.']},
+  m7:{n:'Cast-iron ribeye, roasted vegetables, salad',keep:'Eat fresh',note:'With fatty, protein-heavy meals, blood sugar can rise slowly 2–4 hours later.',steps:['Take the steak out of the fridge 30 min ahead, pat it dry and salt it.','Roast the vegetables with olive oil at 200°C for 20 min.','Heat the cast-iron pan until it smokes and sear the steak 3–4 min per side.','In the last minute add the butter, garlic and rosemary and spoon them over the steak.','Rest for 5 min and serve with the salad.']},
+  m8:{n:'Baked eggplant with ground beef, yogurt, bulgur',keep:'3 days',steps:['Peel the eggplants in stripes, brush with oil and bake at 220°C for 20 min.','Brown the ground beef with the onion; add the tomatoes, peppers and tomato paste and cook for 10 min.','Slit the eggplants open, fill them and bake for another 20 min.','Cook the bulgur and serve with yogurt.']},
+  m9:{n:'Chicken and vegetable stir-fry, buckwheat',keep:'3 days',steps:['Rinse the buckwheat and simmer it in twice its volume of water for 15 min.','Slice the chicken into strips, stir-fry in a wide pan over high heat and set aside.','In the same pan cook the vegetables for 5 min, then add the garlic and grated ginger.','Add the chicken and soy sauce and toss for 2 min.']},
+  m11:{n:'Chicken whole wheat pasta salad',keep:'3 days',note:'The highest-carb meal on the list; best on training days.',steps:['Cook the pasta al dente and rinse it under cold water. Cooled pasta has more resistant starch and raises blood sugar more slowly.','Season the chicken with oregano and salt; air fry at 200°C for 15 min or pan-cook, then chop.','Chop the vegetables and crumble the cheese.','Toss everything with olive oil and lemon.']},
+  m13:{n:'Beef sauté, bulgur',keep:'3 days',steps:['Sear the beef in a cast-iron pan over high heat in batches; crowd the pan and it will stew in its own juices.','Set the beef aside and cook the onion, peppers and mushrooms in the same pan.','Return the beef, add oregano and black pepper and cook for 5 min.','Cook the bulgur in twice its volume of water.']},
+  m15:{n:'Chicken and chickpea stew, yogurt',keep:'4 days; freezes',steps:['Cube the chicken and brown it in oil.','Add the onion; once soft, add the tomato paste and grated tomatoes.','Add the chickpeas and 2 cups of hot water and simmer on low heat for 20 min.','Serve with yogurt.']},
+  n1:{n:'Baked vegetable frittata, rye bread',keep:'3 days; good cold too',steps:['Chop the vegetables and sauté them for 5 min.','Whisk the eggs and add the curd cheese and kashar.','Stir in the vegetables and pour into a greased baking dish.','Bake at 180°C for 25 min, until set in the middle.','Slice once warm and pack each portion with a slice of bread.']},
+  n2:{n:'Chicken whole wheat wrap',keep:'Chicken 3 days; wrap on the day you eat it',steps:['Cut the chicken into thin strips and toss with the spices.','Air fry at 200°C for 12 min or pan-cook.','Make a sauce with yogurt, crushed garlic and salt.','If you’re taking it to work, pack the chicken and vegetables separately and wrap at work so it stays dry.']},
+  s1:{n:'Strained yogurt, walnuts, cinnamon',steps:['Spoon the yogurt into a bowl, crumble the walnuts on top and sprinkle with cinnamon.']},
+  s2:{n:'2 boiled eggs, 1 apple',steps:['Boil the eggs for 9 min.','Boil 6–8 at the start of the week and keep them in their shells; they last 5 days.']},
+  s3:{n:'Curd cheese, whole wheat bread, tomato',steps:['Drizzle the curd cheese with a little oregano and olive oil if you like, and slice the vegetables.']},
+  s4:{n:'Kefir, almonds',steps:['Ready to eat. Buy plain kefir, not flavored.']},
+  s5:{n:'Peanut butter toast, banana, ayran',note:'A good choice 45–60 min before training.',steps:['Spread the peanut butter on the bread and top with banana slices.','Eat with the ayran 45–60 min before training.']},
+  s6:{n:'Hummus, vegetable sticks, egg',steps:['Cut the vegetables into sticks.','Homemade hummus: blend 400 g cooked chickpeas, 3 tbsp tahini, 1 lemon, 1 clove of garlic and a little water; it keeps for 5 days.']},
+  s7:{n:'White cheese, walnuts, cucumber',steps:['Slice and pack.']},
+  s8:{n:'Peanut butter cocoa kefir (blender)',keep:'3 days in the fridge; shake before drinking',note:'As a drink it is absorbed a little faster than solid food. Leave out banana, honey or dates to keep the sugar low.',steps:['Put everything in the blender and blend for 30–40 s.','Divide into three glass bottles or jars and refrigerate.','Chia thickens it over time; shake before drinking and add a little water if it gets too thick.']},
+  b1:{n:'Menemen, white cheese, whole grain bread',steps:['Sauté the peppers in oil for 3 min.','Add the grated tomatoes and cook until the liquid evaporates.','Crack in the eggs, stir gently and cook over low heat.']},
+  b2:{n:'Oatmeal, 2 boiled eggs',note:'Use old-fashioned oats rather than quick oats; they raise blood sugar more slowly.',steps:['Simmer the oats in the milk on low heat for 5–7 min.','Meanwhile boil the eggs for 9 min.','Serve the oatmeal with walnuts, blueberries and cinnamon, eggs on the side.']},
+  b3:{n:'Mushroom and spinach omelette, avocado',steps:['Sauté the mushrooms in oil for 4 min and the spinach for 1 min.','Pour in the beaten eggs, sprinkle with kashar, cover and cook on low heat.','Serve with sliced avocado.']},
+  b4:{n:'Mini Turkish breakfast spread',steps:['Boil the eggs for 9 min and arrange everything else on a plate.']},
+  g1:{n:'Kefir',steps:['Ready to drink.']},
+  g2:{n:'Strained yogurt, cinnamon',steps:['Ready to eat.']},
+  g3:{n:'Ayran, 2 boiled eggs',note:'On running days you can add a slice of rye bread.',steps:['Ready, if you boiled eggs at the start of the week.']},
+  g4:{n:'Curd cheese, walnuts',steps:['Mix, and sprinkle with cinnamon if you like.']}
+};
+const ING_EN={
+  'derisiz kemiksiz tavuk but':'skinless boneless chicken thighs','pilavlık bulgur':'coarse bulgur','kabak':['zucchini','zucchini'],'kırmızı biber':['red bell pepper','red bell peppers'],'soğan':['onion','onions'],'yoğurt':'yogurt','biber salçası':'red pepper paste','zeytinyağı':'olive oil','kimyon, pul biber, tuz':'cumin, chili flakes, salt',
+  'dana kuşbaşı':'beef, cubed','yeşil mercimek':'green lentils','havuç':['carrot','carrots'],'domates salçası':'tomato paste','tuz, karabiber, pul biber':'salt, black pepper, chili flakes',
+  'yağsız dana kıyma':'lean ground beef','yumurta':['egg','eggs'],'yulaf ezmesi':'rolled oats','haşlanmış nohut':'cooked chickpeas','domates':['tomato','tomatoes'],'roka':'arugula','maydanoz':'parsley','limon':['lemon','lemons'],'kimyon, tuz, karabiber':'cumin, salt, black pepper',
+  'taze fasulye':'green beans','tuz, karabiber':'salt, black pepper','kıyma (%10 yağlı)':'ground beef (10% fat)','haşlanmış barbunya':'cooked kidney beans','küp doğranmış domates (konserve)':'canned diced tomatoes','sarımsak':'garlic','kimyon':'cumin','toz kırmızı biber':'chili powder',
+  'tavuk göğsü':'chicken breast','salatalık':['cucumber','cucumbers'],'kekik, tuz, karabiber':'oregano, salt, black pepper','antrikot':'ribeye steak','tereyağı':'butter','taze biberiye':'fresh rosemary','mantar':'mushrooms','yeşil salata':'green salad','iri tuz, karabiber':'coarse salt, black pepper',
+  'patlıcan':['eggplant','eggplants'],'kıyma':'ground beef','sivri biber':['green pepper','green peppers'],'karabuğday':'buckwheat','taze zencefil':'fresh ginger','soya sosu':'soy sauce','tam buğday makarna':'whole wheat pasta','beyaz peynir':'white cheese (feta-style)','çeri domates':'cherry tomatoes','kekik, tuz':'oregano, salt','kekik, karabiber, tuz':'oregano, black pepper, salt',
+  'tavuk (göğüs ve but karışık)':'chicken (breast and thigh)','pul biber, tuz':'chili flakes, salt','lor peyniri':'curd cheese (lor)','rendelenmiş kaşar':'grated kashar cheese','ıspanak':'spinach','taze soğan':'green onion','çavdar ekmeği':'rye bread','tam buğday lavaş':['whole wheat wrap','whole wheat wraps'],'marul':['lettuce','lettuces'],'pul biber, kekik, kimyon':'chili flakes, oregano, cumin',
+  'az yağlı süzme yoğurt':'low-fat strained yogurt','ceviz':'walnuts','tarçın':'cinnamon','elma':['apple','apples'],'tam buğday ekmeği':'whole wheat bread','sade kefir':'plain kefir','çiğ badem':'raw almonds','saf yer fıstığı ezmesi':'pure peanut butter','muz':['banana','bananas'],'ayran':'ayran','humus':'hummus','haşlanmış yumurta':['boiled egg','boiled eggs'],
+  'şekersiz kakao':'unsweetened cocoa','chia tohumu':'chia seeds','dondurulmuş çilek':'frozen strawberries','tam tahıllı ekmek':'whole grain bread','maydanoz, pul biber':'parsley, chili flakes','iri yulaf':'old-fashioned oats','yarım yağlı süt':'semi-skimmed milk','yaban mersini (dondurulmuş olur)':'blueberries (frozen is fine)','kaşar':'kashar cheese','avokado':['avocado','avocados'],'zeytin':['olive','olives']
+};
+const UNIT_EN={yk:['tbsp','tbsp'],tk:['tsp','tsp'],'diş':['clove','cloves'],dilim:['slice','slices'],demet:['bunch','bunches'],dal:['stalk','stalks'],'parça':['piece','pieces'],kase:['bowl','bowls']};
+
+let lang=store.get('fit-lang','');
+if(lang!=='tr'&&lang!=='en')lang=(navigator.language||'tr').toLowerCase().startsWith('tr')?'tr':'en';
+const T=()=>UI[lang];
+const en=()=>lang==='en';
+const tx=s=>en()?s.replace(/her bacak/g,'per leg').replace(/her taraf/g,'per side').replace(/ sn\b/g,' s').replace(/ dk\b/g,' min').replace('(ileri seviye)','(advanced)'):s;
+const mName=id=>en()?MEALS_EN[id].n:MEALS[id].n;
+const progName=s=>en()?(PROG_EN[s]||s):s;
+
+/* ---------- theme ---------- */
+const root=document.documentElement, themeb=document.getElementById('themeb');
+function isDark(){const t=root.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;}
+function paintThemeBtn(){const d=isDark();themeb.classList.toggle('is-dark',d);themeb.setAttribute('aria-label',d?T().toLight:T().toDark);themeb.title=d?T().light:T().dark;}
+const savedTheme=store.get('fit-theme','');
+if(savedTheme)root.dataset.theme=savedTheme;
+themeb.onclick=()=>{const next=isDark()?'light':'dark';root.dataset.theme=next;store.set('fit-theme',next);paintThemeBtn();};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',paintThemeBtn);
+
+/* ---------- training ---------- */
+let prog=store.get('fit-prog','p4'); if(!PROGRAMS[prog])prog='p4';
+function renderTraining(){
+  document.getElementById('progSeg').innerHTML=Object.entries(PROGRAMS).map(([k,v])=>`<button data-p="${k}" aria-pressed="${k===prog}">${progName(v.label)}</button>`).join('');
+  document.querySelectorAll('#progSeg button').forEach(b=>b.onclick=()=>{prog=b.dataset.p;store.set('fit-prog',prog);renderTraining();});
+  document.getElementById('workouts').innerHTML=PROGRAMS[prog].days.map((day,di)=>`
+    <section class="blk">
+      <div class="blk-h"><h2>${progName(day.t)}</h2><span class="meta">${tx(day.d)}</span></div>
+      <div class="list">${day.x.map(([id,dose],xi)=>`
+        <button class="row" data-d="${di}" data-x="${xi}"><span class="rn">${EX[id].n}</span><span class="rm">${tx(dose)}</span><span class="ra" aria-hidden="true">›</span></button>`).join('')}
+      </div>
+    </section>`).join('');
+  document.querySelectorAll('#workouts .row').forEach(b=>b.onclick=()=>openExercise(...PROGRAMS[prog].days[b.dataset.d].x[b.dataset.x]));
+}
+function openExercise(id,dose,rest){
+  const e=EX[id],p=POSES[id],U=T();
+  const f=(pose,lab)=>{const s=fig(p.v,pose,e.n+' '+lab);return en()?s.replace('kablo yanda','cable at side'):s;};
+  openDialog(e.n,`
+    <div class="figs">
+      <figure>${f(p.s,U.start)}<figcaption>${U.start}</figcaption></figure>
+      <span class="arr" aria-hidden="true">→</span>
+      <figure>${f(p.e,U.end)}<figcaption>${U.end}</figcaption></figure>
+    </div>
+    <dl class="kv"><div><dt>${U.sets}</dt><dd>${tx(dose)}</dd></div><div><dt>${U.rest}</dt><dd>${tx(rest)}</dd></div></dl>
+    <p>${en()?EX_EN[id]:e.c}</p>
+    <h3>${U.alts}</h3>
+    <ul class="alts">${e.alt.map(a=>`<li>${tx(a)}</li>`).join('')}</ul>`);
+}
+
+/* ---------- nutrition ---------- */
+function renderNutrition(){
+  const U=T();
+  document.getElementById('slots').innerHTML=SLOTS.map((s,si)=>`
+    <section class="blk">
+      <div class="blk-h"><h2>${U.slots[si]}</h2></div>
+      <div class="list">${s.o.map(id=>{const e=eff(id);return `
+        <button class="row meal${id[0]==='b'?' bf':''}" data-id="${id}"><span class="dot ${e}" title="${U.eff[e]}" aria-label="${U.eff[e]}"></span><span class="rn">${mName(id)}</span><span class="ra" aria-hidden="true">›</span></button>`}).join('')}
+      </div>
+    </section>`).join('');
+  document.querySelectorAll('#slots .row').forEach(b=>b.onclick=()=>openMeal(b.dataset.id));
+}
+function ingLine(q,u,n,por,base){
+  if(!en()){
+    if(q==null)return n;
+    let v=q*por/base;
+    if(u==='g'||u==='ml'){v=v>=100?Math.round(v/10)*10:Math.max(5,Math.round(v/5)*5);return `${v} ${u} ${n}`;}
+    v=Math.round(v*2)/2; if(v<0.5)v=0.5;
+    const s=v===0.5?'yarım':String(v).replace('.',',');
+    return `${u?`${s} ${u}`:s} ${n}`;
+  }
+  const e=ING_EN[n]||n, nm=Array.isArray(e)?e:[e,e];
+  if(q==null)return nm[0];
+  let v=q*por/base;
+  if(u==='g'||u==='ml'){v=v>=100?Math.round(v/10)*10:Math.max(5,Math.round(v/5)*5);return `${v} ${u} ${nm[0]}`;}
+  v=Math.round(v*2)/2; if(v<0.5)v=0.5;
+  const s=v===0.5?'½':String(v), pl=v>1;
+  if(u){const un=UNIT_EN[u]||[u,u];return `${s} ${pl?un[1]:un[0]} ${nm[0]}`;}
+  return `${s} ${pl?nm[1]:nm[0]}`;
+}
+function openMeal(id){
+  const m=MEALS[id],E=MEALS_EN[id],e=eff(id),U=T(),L=en();
+  let por=m.base;
+  const keep=L?E.keep:m.keep, note=L?E.note:m.note, steps=L?E.steps:m.steps;
+  const tags=[id[0]==='b'?U.bf:'',L?METHOD_EN[m.m]:m.m,m.go?U.go:'',keep||''].filter(Boolean);
+  openDialog(mName(id),`
+    <div class="tags"><span class="ef"><span class="dot ${e}"></span>${U.eff[e]}, ${U.prep(EFF[id])}</span>${tags.map(t=>`<span>${t}</span>`).join('')}</div>
+    <div class="mac">
+      <div><b>${kcal(m)}</b><small>kcal</small></div>
+      <div><b>${m.c}<span class="gi ${m.g}" title="${U.gi[m.g]}" aria-label="${U.gi[m.g]}"></span></b><small>${U.c}</small></div>
+      <div><b>${m.p}</b><small>${U.p}</small></div>
+      <div><b>${m.f}</b><small>${U.f}</small></div>
+      <div class="sug"><b>${m.s}</b><small>${U.s}</small></div>
+    </div>
+    <h3>${U.shop} <span class="por"><button data-d="-1" aria-label="${U.less}">−</button><b id="porv"></b><button data-d="1" aria-label="${U.more}">+</button></span></h3>
+    <ul class="shop" id="shop"></ul>
+    <h3>${U.recipe}</h3>
+    <ol class="steps">${steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+    ${note?`<p class="note">${note}</p>`:''}`);
+  const draw=()=>{
+    document.getElementById('porv').textContent=U.por(por);
+    document.getElementById('shop').innerHTML=m.ing.map(([q,u,n])=>`<li><label><input type="checkbox"><span>${ingLine(q,u,n,por,m.base)}</span></label></li>`).join('');
+  };
+  draw();
+  dlg.querySelectorAll('.por button').forEach(b=>b.onclick=()=>{por=Math.min(8,Math.max(1,por+Number(b.dataset.d)));draw();});
+}
+
+/* ---------- language ---------- */
+function applyLang(){
+  const U=T();
+  root.lang=lang;
+  document.getElementById('t-antrenman').textContent=U.tabT;
+  document.getElementById('t-beslenme').textContent=U.tabN;
+  const g=document.getElementById('langs');
+  g.setAttribute('aria-label',U.langs);
+  g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===lang)));
+  if(dlg.open)dlg.close();
+  renderTraining();renderNutrition();paintThemeBtn();
+}
+document.querySelectorAll('#langs button').forEach(b=>b.onclick=()=>{if(b.dataset.l===lang)return;lang=b.dataset.l;store.set('fit-lang',lang);applyLang();});
+
+/* ---------- tabs ---------- */
+function show(name){
+  if(name!=='antrenman'&&name!=='beslenme')name='antrenman';
+  ['antrenman','beslenme'].forEach(n=>{document.getElementById(n).hidden=n!==name;document.getElementById('t-'+n).setAttribute('aria-selected',String(n===name));});
+}
+document.getElementById('t-antrenman').onclick=()=>{location.hash='antrenman'};
+document.getElementById('t-beslenme').onclick=()=>{location.hash='beslenme'};
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+applyLang();show(location.hash.slice(1));
+</script>
+</body>
+</html>
