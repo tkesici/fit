@@ -3,19 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fit — Tevfik Kesici</title>
+<title>Tevfik Kesici</title>
 <meta name="description" content="Antrenman programı ve toplu hazırlanan yemek tarifleri.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="favicon.svg?v=11" type="image/svg+xml">
 <style>
 :root{
-  --bg:#F1EDE4; --ink:#1D1B18; --muted:#6F6A61; --line:#D8D2C6; --soft:#E9E4D9;
+  --bg:#F2EDE3; --ink:#1D1B18; --muted:#776F62; --line:#D9D0BF; --soft:#E9E4D9;
   --tint:#ECE7DD; --hover:#E3DDD1; --eq:#8C8273;
   --g:#5F8A5E; --y:#C49A2A; --r:#B4553D; --sug:#93561C; --sug-bg:#E9DECA;
-  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -23,21 +21,21 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#161513; --ink:#ECE7DE; --muted:#9C968B; --line:#2F2C28; --soft:#211F1C;
+    --bg:#151411; --ink:#EBE4D6; --muted:#91887A; --line:#2F2C26; --soft:#211F1C;
     --tint:#1C1A18; --hover:#262420; --eq:#A69C8B;
     --g:#7FAE7C; --y:#D9B44E; --r:#D27760; --sug:#E2AA6C; --sug-bg:#2B241B;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#161513; --ink:#ECE7DE; --muted:#9C968B; --line:#2F2C28; --soft:#211F1C;
+  --bg:#151411; --ink:#EBE4D6; --muted:#91887A; --line:#2F2C26; --soft:#211F1C;
   --tint:#1C1A18; --hover:#262420; --eq:#A69C8B;
   --g:#7FAE7C; --y:#D9B44E; --r:#D27760; --sug:#E2AA6C; --sug-bg:#2B241B;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+html{background:var(--bg);-webkit-text-size-adjust:100%;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button{font:inherit;color:inherit}
 button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
@@ -198,6 +196,7 @@ dialog.md::backdrop{background:rgba(20,18,15,.45)}
 <dialog class="md" id="md"></dialog>
 
 <script>
+document.addEventListener('selectstart',e=>e.preventDefault());
 /* ---------- figure drawing ---------- */
 const L=(a,b,c='lm')=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" class="${c}"/>`;
 const db=at=>({t:'db',at}), hd=at=>({t:'h',at}), bar=at=>({t:'bar',at});
