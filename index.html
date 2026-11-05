@@ -330,7 +330,25 @@ const POSES={
     e:{h:[20,88],s:[30,92],p:[57,98],k:[80,103],a:[104,108],t:null,e:[30,108],w:[46,108],e2:[42,84],w2:[55,92]}},
   farmer:{v:'side',
     s:{...ST,fg:[db([62,66])]},
-    e:{h:[63,22],s:[62,33],p:[61,62],k:[67,86],a:[72,110],k2:[54,86],a2:[48,110],t2:[55,110],e:[63,48],w:[64,63],fg:[db([64,66])]}}
+    e:{h:[63,22],s:[62,33],p:[61,62],k:[67,86],a:[72,110],k2:[54,86],a2:[48,110],t2:[55,110],e:[63,48],w:[64,63],fg:[db([64,66])]}},
+  machineshoulder:{v:'side',
+    s:{h:[42,51],s:[42,62],p:[44,92],k:[66,92],a:[70,110],e:[48,74],w:[50,57],bg:[{t:'rect',x:28,y:94,w:28,h:5},{t:'ln',a:[34,94],b:[34,40]},{t:'ln',a:[42,99],b:[42,110],c:'mt'}],fg:[hd([50,57])]},
+    e:{h:[42,51],s:[42,62],p:[44,92],k:[66,92],a:[70,110],e:[47,44],w:[49,27],bg:[{t:'rect',x:28,y:94,w:28,h:5},{t:'ln',a:[34,94],b:[34,40]},{t:'ln',a:[42,99],b:[42,110],c:'mt'}],fg:[hd([49,27])]}},
+  calfraise:{v:'side',
+    s:{...ST},
+    e:{h:[60,15],s:[60,26],p:[60,55],k:[60,79],a:[57,103],t:[64,110],e:[61,41],w:[62,56]}},
+  abduction:{v:'front',
+    s:{...FS,kL:[56,80],kR:[64,80],aL:[55,108],aR:[65,108],eL:[44,58],wL:[42,72],eR:[76,58],wR:[78,72],bg:[{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'roll',at:[50,80]},{t:'roll',at:[70,80]}]},
+    e:{...FS,kL:[42,80],kR:[78,80],aL:[40,108],aR:[80,108],eL:[44,58],wL:[42,72],eR:[76,58],wR:[78,72],bg:[{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'roll',at:[36,80]},{t:'roll',at:[84,80]}]}},
+  adduction:{v:'front',
+    s:{...FS,kL:[42,80],kR:[78,80],aL:[40,108],aR:[80,108],eL:[44,58],wL:[42,72],eR:[76,58],wR:[78,72],bg:[{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'roll',at:[48,80]},{t:'roll',at:[72,80]}]},
+    e:{...FS,kL:[54,80],kR:[66,80],aL:[54,108],aR:[66,108],eL:[44,58],wL:[42,72],eR:[76,58],wR:[78,72],bg:[{t:'rect',x:38,y:74,w:44,h:6},{t:'ln',a:[60,80],b:[60,110],c:'mt'}],fg:[{t:'roll',at:[58,80]},{t:'roll',at:[62,80]}]}},
+  crunch:{v:'side',
+    s:{h:[16,100],s:[28,104],p:[60,104],k:[76,84],a:[90,108],e:[40,98],w:[32,96]},
+    e:{h:[24,81],s:[33,89],p:[60,104],k:[76,84],a:[90,108],e:[44,85],w:[36,83]}},
+  plank:{v:'side',
+    s:{h:[21,86],s:[30,92],p:[64,96],k:[86,100],a:[106,104],t:[104,110],e:[30,108],w:[46,108]},
+    e:{h:[21,86],s:[30,92],p:[64,95],k:[86,100],a:[106,104],t:[104,110],e:[30,108],w:[46,108]}}
 };
 
 
@@ -356,7 +374,15 @@ const EX={
   deadbug:{n:'Dead bug',c:'Bel yere yapışık. Karşı kol ve bacağı nefes vererek yavaşça uzat, geri gel, taraf değiştir. Baş yerde kalsın.',alt:['Bird dog','Reverse crunch','Hollow hold']},
   pallof:{n:'Pallof press',c:'Kablo yandan çekerken kolları göğüsten öne uzat; gövdenin dönmesine izin verme. İki saniye tut.',alt:['Band Pallof press','Half-kneeling Pallof press','Suitcase carry']},
   sideplank:{n:'Side plank',c:'Dirsek omuzun tam altında; baş, kalça ve topuk tek çizgi. Zorlanırsan dizleri yere koy.',alt:['Kneeling side plank','Suitcase carry','Copenhagen plank (ileri seviye)']},
-  farmer:{n:'Farmer’s walk',c:'Ağır dumbbell’larla dik yürü; omuzlar geride ve aşağıda. Kavrama, bilek ve gövde aynı anda çalışır.',alt:['Suitcase carry','Trap bar carry','Kettlebell carry']}
+  farmer:{n:'Farmer’s walk',c:'Ağır dumbbell’larla dik yürü; omuzlar geride ve aşağıda. Kavrama, bilek ve gövde aynı anda çalışır.',alt:['Suitcase carry','Trap bar carry','Kettlebell carry']},
+  machinechest:{n:'Machine chest press',c:'Koltuğu tutamaklar göğüs hizasına gelecek şekilde ayarla. Sırt pedde, kolları ileri it; sonda dirsekleri kilitleme, yavaşça geri gel.',alt:['Dumbbell bench press','Push-up','Barbell bench press']},
+  machineshoulder:{n:'Machine shoulder press',c:'Tutamaklar omuz hizasından başlasın; yukarı it, tepede dirsekleri kilitleme, kontrollü indir. Baş ve bel pedde kalsın.',alt:['Landmine press','Machine lateral raise','Cable lateral raise']},
+  calfraise:{n:'Calf raise',c:'Parmak uçlarında olabildiğince yüksel, tepede bir saniye tut, topukları yavaşça indir.',alt:[]},
+  cablecurl:{n:'Cable curl',c:'Makara en altta, kabloya dönük dur. Dirsekler gövdede sabit, tutamağı omuzlara doğru kaldır, iki saniyede indir.',alt:['Biceps curl','Hammer curl','Incline dumbbell curl']},
+  abduction:{n:'Hip abduction',c:'Pedler dizlerin dış tarafında. Bacakları kontrollü aç, bir saniye tut, ağırlıklar birbirine çarpmadan geri getir.',alt:['Glute bridge']},
+  adduction:{n:'Hip adduction',c:'Pedler dizlerin iç tarafında. Bacakları kontrollü kapat, bir saniye sık, yavaşça aç.',alt:['Copenhagen plank (ileri seviye)']},
+  crunch:{n:'Crunch',c:'Belin yerde kalsın, yalnızca kürek kemiklerini kaldır; nefes vererek yukarı, yavaşça aşağı. Eller göğüste çapraz, başı elle çekme.',alt:['Reverse crunch','Dead bug','Hollow hold']},
+  plank:{n:'Plank',c:'Dirsekler omuzların altında; baş, kalça ve topuk tek çizgi. Karnı ve kalçayı sık, beli çökertme. Bakış yerde.',alt:['Side plank','Dead bug','Hollow hold']}
 };
 /* ---------- alternatives ---------- */
 const RAIL=x=>({t:'ln',a:[x,4],b:[x,110],c:'mt'});
@@ -671,7 +697,9 @@ const PROGRAMS={
   p3:{label:'Full body',days:[
     {t:'Full body A',d:'≈55 dk',x:[['goblet','3 × 8–12','2 dk'],['dbbench','3 × 8–12','2 dk'],['csrow','3 × 10–12','90 sn'],['rdl','3 × 8–10','2 dk'],['latraise','2 × 12–15','60 sn'],['deadbug','3 × 6 her taraf','45 sn']]},
     {t:'Full body B',d:'≈55 dk',x:[['legpress','3 × 10–12','2 dk'],['incline','3 × 8–12','2 dk'],['pulldown','3 × 10–12','90 sn'],['hipthrust','3 × 8–12','2 dk'],['facepull','3 × 15','60 sn'],['pallof','3 × 10 her taraf','45 sn']]},
-    {t:'Full body C',d:'≈65 dk',x:[['bulgarian','3 × 8–10 her bacak','90 sn'],['dbbench','3 × 10–12','2 dk'],['seatedrow','3 × 10–12','90 sn'],['legcurl','3 × 10–12','60 sn'],['cablefly','2 × 12–15','60 sn'],['curl','2 × 12','60 sn'],['pushdown','2 × 12','60 sn'],['sideplank','3 × 30 sn her taraf','45 sn'],['farmer','3 × 30 m','60 sn']]}
+    {t:'Full body C',d:'≈65 dk',x:[['bulgarian','3 × 8–10 her bacak','90 sn'],['dbbench','3 × 10–12','2 dk'],['seatedrow','3 × 10–12','90 sn'],['legcurl','3 × 10–12','60 sn'],['cablefly','2 × 12–15','60 sn'],['curl','2 × 12','60 sn'],['pushdown','2 × 12','60 sn'],['sideplank','3 × 30 sn her taraf','45 sn'],['farmer','3 × 30 m','60 sn']]},
+    {t:'Full body D',d:'10 dk ısınma · ≈45 dk · 30 dk kardiyo',x:[['machinechest','4 × 10–12','90 sn'],['machineshoulder','4 × 10–12','90 sn'],['pushdown','4 × 10–12','60 sn'],['legpress','4 × 10–12','90 sn'],['calfraise','4 × 10–12','60 sn']]},
+    {t:'Full body E',d:'10 dk ısınma · ≈50 dk · 30 dk kardiyo',x:[['pulldown','4 × 10–12','90 sn'],['cablecurl','4 × 10–12','60 sn'],['legcurl','4 × 10–12','60 sn'],['abduction','4 × 10–12','60 sn'],['adduction','4 × 10–12','60 sn'],['crunch','3 × 10','45 sn'],['plank','3 × 10 sn','45 sn']]}
   ]}
 };
 
@@ -789,7 +817,7 @@ const UI={
   en:{tabT:'Training',tabN:'Nutrition',start:'Start',end:'Finish',sets:'Sets × reps',rest:'Rest',time:'Time',alts:'Alternatives',shop:'Shopping list',recipe:'Recipe',por:n=>`${n} serving${n>1?'s':''}`,c:'carbs g',p:'protein g',f:'fat g',s:'sugar g',prep:m=>`≈${m} min active prep`,bf:'Breakfast',go:'Packs for work',close:'Close',less:'Fewer servings',more:'More servings',toLight:'Switch to light theme',toDark:'Switch to dark theme',light:'Light theme',dark:'Dark theme',eff:{g:'Easy',y:'Some effort',r:'Serious prep'},gi:{low:'Low GI',mid:'Medium GI',lowmid:'Low–medium GI',high:'High GI'},slots:['Lunch','Snack','Dinner','Late night'],langs:'Language'}
 };
 const METHOD_EN={'Fırın':'Oven','Ocak':'Stovetop','Airfryer':'Air fryer','Döküm tava':'Cast iron','Pişirmesiz':'No-cook','Blender':'Blender'};
-const PROG_EN={'Bölgesel':'Split','Full body':'Full body','Üst vücut 1':'Upper body 1','Alt vücut 1':'Lower body 1','Üst vücut 2':'Upper body 2','Alt vücut 2':'Lower body 2','Full body A':'Full body A','Full body B':'Full body B','Full body C':'Full body C'};
+const PROG_EN={'Bölgesel':'Split','Full body':'Full body','Üst vücut 1':'Upper body 1','Alt vücut 1':'Lower body 1','Üst vücut 2':'Upper body 2','Alt vücut 2':'Lower body 2','Full body A':'Full body A','Full body B':'Full body B','Full body C':'Full body C','Full body D':'Full body D','Full body E':'Full body E'};
 const EX_EN={
   goblet:'Hold the dumbbell against your chest and sit your hips back and down. Knees track over your toes, chest stays up.',
   legpress:'Go as deep as you can without your lower back lifting off the pad, and don’t lock your knees at the top. Keep your head on the pad.',
@@ -810,7 +838,15 @@ const EX_EN={
   deadbug:'Lower back pressed into the floor. Slowly extend the opposite arm and leg as you exhale, come back and switch sides. Keep your head down.',
   pallof:'With the cable pulling from the side, press your hands straight out from your chest without letting your torso rotate. Hold for two seconds.',
   sideplank:'Elbow directly under your shoulder; head, hips and heels in one line. Drop to your knees if needed.',
-  farmer:'Walk tall with heavy dumbbells, shoulders back and down. Grip, wrists and core all work at once.'
+  farmer:'Walk tall with heavy dumbbells, shoulders back and down. Grip, wrists and core all work at once.',
+  machinechest:'Set the seat so the handles line up with your chest. Back on the pad, press forward without locking your elbows at the end, and return slowly.',
+  machineshoulder:'Start with the handles at shoulder height; press up without locking your elbows at the top and lower under control. Keep your head and lower back on the pad.',
+  calfraise:'Rise as high as you can onto your toes, hold for a second at the top and lower your heels slowly.',
+  cablecurl:'Pulley at the lowest setting, facing the cable. Elbows fixed at your sides, curl the handle toward your shoulders and take two seconds on the way down.',
+  abduction:'Pads on the outside of your knees. Push your legs apart under control, hold for a second, and bring them back before the weights touch.',
+  adduction:'Pads on the inside of your knees. Squeeze your legs together under control, hold for a second, and open slowly.',
+  crunch:'Lower back stays on the floor; lift only your shoulder blades as you exhale and lower slowly. Arms crossed on your chest, never pull on your head.',
+  plank:'Elbows under your shoulders; head, hips and heels in one line. Brace your abs and glutes and don’t let your lower back sag. Eyes on the floor.'
 };
 const MEALS_EN={
   m1:{n:'Oven-baked chicken thighs, bulgur, roasted vegetables',keep:'3 days in the fridge',steps:['Mix the chicken with the yogurt, pepper paste, spices and 1 tbsp olive oil; marinate in the fridge for at least 30 min.','Cut the vegetables into large pieces, spread them on a tray with the remaining oil and lay the chicken on top.','Bake at 200°C for 35–40 min until browned.','Meanwhile cook the bulgur in twice its volume of water for 15 min, then let it rest for 10 min.','Divide into portions and pack into containers.']},
@@ -861,7 +897,7 @@ let lang=store.get('fit-lang','');
 if(lang!=='tr'&&lang!=='en')lang=(navigator.language||'tr').toLowerCase().startsWith('tr')?'tr':'en';
 const T=()=>UI[lang];
 const en=()=>lang==='en';
-const tx=s=>en()?s.replace(/her bacak/g,'per leg').replace(/her taraf/g,'per side').replace(/her kol/g,'per arm').replace(/ sn\b/g,' s').replace(/ dk\b/g,' min').replace('(ileri seviye)','(advanced)'):s;
+const tx=s=>en()?s.replace(/her bacak/g,'per leg').replace(/her taraf/g,'per side').replace(/her kol/g,'per arm').replace(/ sn\b/g,' s').replace(/ dk\b/g,' min').replace('(ileri seviye)','(advanced)').replace('ısınma','warm-up').replace('kardiyo','cardio'):s;
 const mName=id=>en()?MEALS_EN[id].n:MEALS[id].n;
 const progName=s=>en()?(PROG_EN[s]||s):s;
 
@@ -911,7 +947,7 @@ function openExercise(id,dose,rest,from){
     </div>
     <dl class="kv"><div><dt>${U.sets}</dt><dd>${tx(d)}</dd></div><div><dt>${U.rest}</dt><dd>${tx(rest)}</dd></div><div><dt>${U.time}</dt><dd>${tx(`≈${exMin(d,rest)} dk`)}</dd></div></dl>
     <p>${en()?(EX_EN[id]||e.en):e.c}</p>
-    <h3>${U.alts}</h3>
+    ${alts.length?`<h3>${U.alts}</h3>`:''}
     <ul class="alts">${alts.map(a=>`<li><button type="button" data-a="${a}"><span>${tx(exData(a).n)}</span><span class="ra" aria-hidden="true">›</span></button></li>`).join('')}</ul>`);
   dlg.querySelectorAll('.alts button').forEach(b=>b.onclick=()=>{const a=b.dataset.a;openExercise(a,dose,rest,a===base?undefined:base);});
 }
